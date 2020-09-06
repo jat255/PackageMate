@@ -1,0 +1,70 @@
+.App {
+  text-align: center;
+  font-size: calc(10px + 2vmin);
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+div.tab-pane.active {
+  border: 1px solid transparent;
+  border-bottom-left-radius: .25rem;
+  border-color: #dee2e6 #dee2e6;
+  border-bottom-right-radius: .25rem;
+
+  padding: 0.5em;
+}
+
+a#package-tabs-tab-active {
+  color: #155724;
+}
+
+a#package-tabs-tab-active:hover {
+  background-color: #ebf7ee;
+  border-bottom-color:#0b2e13;
+}
+
+a#package-tabs-tab-active.active {
+  color: #155724;
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+  border-bottom-color:#0b2e13;
+}
+
+a#package-tabs-tab-archived {
+  color: #856404;
+}
+
+a#package-tabs-tab-archived:hover {
+  background-color: #fdf6e0;
+  border-bottom-color:#533f03;
+}
+
+a#package-tabs-tab-archived.active {
+  color: #856404;
+  background-color: #fff3cd;
+  border-color: #ffeeba;
+  border-bottom-color:#533f03;
+}
+
+@media only screen and (min-width: 300px) {
+  .App {
+    width: 80%;
+  }
+
+  /* input {
+    width: 100%
+  } */
+
+}
+
+@media only screen and (min-width: 640px) {
+  .App {
+    width: 80%;
+  }
+
+  /* input {
+    width: 50%;
+  } */
+
+}
