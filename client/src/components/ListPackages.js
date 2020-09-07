@@ -14,6 +14,7 @@ const ListPackages = ({ activePackages, archivedPackages, archivePacakge }) => {
                 <tr>
                   <th>Carrier</th>
                   <th>Tracking #</th>
+                  <th>Description</th>
                   <th>Status</th>
                   <th>Last update</th>
                   <th>Update</th>
@@ -28,6 +29,7 @@ const ListPackages = ({ activePackages, archivedPackages, archivePacakge }) => {
                       <tr key={pkg._id}>
                         <td>{pkg.carrier}</td>
                         <td>{pkg.trackingNumber}</td>
+                        <td>{pkg.description}</td>
                         <td>{pkg.lastStatus}</td>
                         <td>{pkg.lastUpdate}</td>
                         <td>U</td>
@@ -35,7 +37,7 @@ const ListPackages = ({ activePackages, archivedPackages, archivePacakge }) => {
                       </tr> 
                     )})) 
                   :
-                  <td colSpan="5">No packages found in database!</td>
+                  <td colSpan="6">No packages found in database!</td>
                 }
               </tbody>
           </Table>
@@ -46,6 +48,7 @@ const ListPackages = ({ activePackages, archivedPackages, archivePacakge }) => {
                 <tr>
                   <th>Carrier</th>
                   <th>Tracking #</th>
+                  <th>Description</th>
                   <th>Status</th>
                   <th>Delivered Date</th>
                   <th>Archive?</th>
@@ -59,13 +62,14 @@ const ListPackages = ({ activePackages, archivedPackages, archivePacakge }) => {
                       <tr key={pkg._id}>
                         <td>{pkg.carrier}</td>
                         <td>{pkg.trackingNumber}</td>
+                        <td>{pkg.description}</td>
                         <td>{pkg.lastStatus}</td>
                         <td>{pkg.lastUpdate}</td>
                         <td>X</td>
                       </tr> 
                     )})) 
                   :
-                  <td colSpan="5">No packages found in database!</td>
+                  <td colSpan="6">No packages found in database!</td>
                 }
               </tbody>
           </Table>        
