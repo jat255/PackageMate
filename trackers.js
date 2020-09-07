@@ -12,7 +12,17 @@ const uspsTracker = (trackingNumber) => {
 }
 
 const upsTracker = (trackingNumber) => {
-  return Promise.reject(`UPS tracking not yet implemented`);
+  let url = process.env.UPS_URL
+
+  return axios.get(`${url}${trackingNumber}`, {
+    headers: {
+      'AccessLicenseNumber': `${process.env.UPS_ACCESS_KEY}`
+    }
+  })
+    .then(res => {
+      return res.data
+    })
+    .catch(err => {return err})
 }
 
 const fedExTracker = (trackingNumber) => {

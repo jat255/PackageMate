@@ -17,6 +17,7 @@
     "express": "^4.17.1",
     "jsdom": "^16.4.0",
     "mongoose": "^5.10.3",
+    "timezonecomplete": "^5.11.2",
     "yarn": "^1.22.5"
   },
   "devDependencies": {
