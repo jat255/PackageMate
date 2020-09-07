@@ -11,9 +11,11 @@
   "author": "Joshua Taillon",
   "license": "MIT",
   "dependencies": {
+    "axios": "^0.20.0",
     "body-parser": "^1.18.3",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "jsdom": "^16.4.0",
     "mongoose": "^5.10.3",
     "yarn": "^1.22.5"
   },

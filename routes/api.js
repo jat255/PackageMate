@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Package = require('../models/package');
+const trackers = require('../trackers')
+const parsers = require('../parsers')
 
 router.get('/carriers', (req, res, next) => {
   // endpoint to return allowable carriers that
@@ -27,9 +29,44 @@ router.get('/packages/update/:id', (req, res, next) => {
   // update a package's status via third-party API
   Package.findById(req.params.id)
     .then(data => {
-      res.json({
-        carrier: data.carrier,
-        trackingNumber: data.trackingNumber
+      if ( data.carrier === 'USPS' ){
+        r = trackers.usps(data.trackingNumber);
+      } else if ( data.carrier === 'FedEx') {
+        r = trackers.fedex(data.trackingNumber);
+      } else if ( data.carrier === 'UPS' ) {
+        r = trackers.ups(data.trackingNumber);
+      } else if ( data.carrier === 'OnTrac' ) {
+        r = trackers.ontrac(data.trackingNumber);
+      } else {
+        r = Promise.reject(`Did not know how to process carrier: ${data.carrier}`);
+      }
+      // once the promise has returned, parse the result (method depends on carrier)
+      Promise.all([r])
+      .then(results => {
+        if ( data.carrier === 'USPS' ){
+          stat = parsers.usps(results);
+        } else if ( data.carrier === 'FedEx') {
+          stat = parsers.fedex(results);
+        } else if ( data.carrier === 'UPS' ) {
+          stat = parsers.ups(results);
+        } else if ( data.carrier === 'OnTrac' ) {
+          stat = parsers.ontrac(results);
+        } else {
+          stat = 'Could not parse tracker response'
+        }
+        // send status in response
+        res.json({
+          carrier: data.carrier,
+          trackingNumber: data.trackingNumber,
+          status: stat
+        })
+      })
+      .catch(results => {
+        res.json({
+          carrier: data.carrier,
+          trackingNumber: data.trackingNumber,
+          status: results
+        })
       })
     })
     .catch(next)
