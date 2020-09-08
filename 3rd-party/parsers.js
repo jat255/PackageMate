@@ -53,7 +53,35 @@ const upsParser = (response) => {
 }
 
 const fedExParser = (response) => {
-  return 'FedEx parser not yet implemented';
+  var tc = require("timezonecomplete");
+
+  // response format:
+  // [
+  //   Saturday , 7/11/2020,                                # date
+  //   10:03 am,                                            # time
+  //   Boulder, CO,                                         # location
+  //   Delivered,                                           # status
+  //   Left at front door.                                  # status more details (not always present)   
+  // ]
+  const res = response[0];
+  console.log(`res: (${typeof(res)}) ${res}`)
+  console.log(`res[0]: ${res[0]}`)
+  console.log(`res[1]: ${res[1]}`)
+  console.log(`res[2]: ${res[2]}`)
+  console.log(`res[3]: ${res[3]}`)
+  // console.log(`results[5]: ${results[5]}`)
+  let [city, state] = res[2].split(', ');
+  console.log(`city, state: ${city}, ${state}`)
+  city = city.charAt(0).toUpperCase() + city.slice(1).toLowerCase();
+  console.log(`city, state: ${city}, ${state}`)
+  let dateTime = new tc.DateTime(
+    `${res[0]} - ${res[1]}`,
+    "EEEE , M/dd/yyy - h:mm aa"
+  )
+  let details = res[3] + (res.length > 4 ? `: ${res[4]}` : '')
+
+  let stat = `${city}, ${state} (${dateTime.format("yyyy-MM-dd hh:mm a")}) - ${details}`
+  return stat;
 }
 
 const onTracParser = (response) => {

@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Package = require('../models/package');
-const trackers = require('../trackers')
-const parsers = require('../parsers')
+const trackers = require('../3rd-party/trackers')
+const parsers = require('../3rd-party/parsers')
 
 router.get('/carriers', (req, res, next) => {
   // endpoint to return allowable carriers that
@@ -65,7 +65,7 @@ router.get('/packages/update/:id', (req, res, next) => {
         res.json({
           carrier: data.carrier,
           trackingNumber: data.trackingNumber,
-          status: results
+          status: results[0]
         })
       })
     })

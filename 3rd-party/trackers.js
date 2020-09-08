@@ -1,4 +1,6 @@
 const axios = require('axios');
+const fs = require('fs');
+const playwright = require('playwright');
 
 const uspsTracker = (trackingNumber) => {
   let url = process.env.USPS_URL
@@ -26,7 +28,23 @@ const upsTracker = (trackingNumber) => {
 }
 
 const fedExTracker = (trackingNumber) => {
-  return Promise.reject(`FedEx tracking not yet implemented`);
+  const url = `https://www.fedex.com/apps/fedextrack/?tracknumbers=${trackingNumber}&locale=en_US`;
+
+  // async function to scrape status from fedex website (since API is
+  // unreliable...)
+  return (async () => {
+    const browser = await playwright.chromium.launch();
+    const page = await browser.newPage();
+    await page.goto(url);
+    const STATUS_SELECTOR = 'ul.redesignTravelHistory';
+    await page.waitForSelector(STATUS_SELECTOR);
+    const results = await page.$(STATUS_SELECTOR);
+    const text = await results.evaluate(element => element.innerText);
+    const res = text.split('\n')
+    await browser.close();
+    return res;
+  })();
+  
 }
 
 const onTracTracker = (trackingNumber) => {
