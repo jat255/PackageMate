@@ -59,6 +59,13 @@ class Package extends Component {
       .catch(err => console.log(err))
   }
 
+  updateAllPackages = () => {
+    this.state.activePackages.map((pkg) => {
+      axios.get(`/api/packages/update/${pkg._id}`)
+      .catch(err => console.log(err));
+    });
+  }
+
   archivePackage = (id) => {
     axios.delete(`/api/packages/${id}`)
       .then(res => {
@@ -83,6 +90,7 @@ class Package extends Component {
         <ListPackages 
           activePackages={this.state.activePackages} 
           archivedPackages={this.state.archivedPackages}
+          updateAllPackages={this.updateAllPackages}
           archivePackage={this.archivePackage} />
       </Container>
     )

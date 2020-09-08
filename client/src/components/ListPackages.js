@@ -4,7 +4,45 @@ import Tab from 'react-bootstrap/Tab'
 import TabContainer from 'react-bootstrap/TabContainer'
 import Table from 'react-bootstrap/Table'
 
-const ListPackages = ({ activePackages, archivedPackages, archivePacakge }) => {
+import uspsLogo from '../img/usps.svg'
+import fedexLogo from '../img/fedex.svg'
+import upsLogo from '../img/ups.svg'
+import ontracLogo from '../img/ontrac.svg'
+
+
+const getUrl = (trackingNumber, carrier) => {
+  if ( carrier === 'USPS' ){
+    return `https://tools.usps.com/go/TrackConfirmAction?qtc_tLabels1=${trackingNumber}`
+  } else if ( carrier === 'UPS' ) {
+    return `https://www.ups.com/track?loc=en_US&tracknum=${trackingNumber}`
+  } else if ( carrier === 'FedEx' ) {
+    return `https://www.fedex.com/apps/fedextrack/?tracknumbers=${trackingNumber}&locale=en_US`
+  } else {
+    return null
+  }
+}
+
+const getLogo = (carrier) => {
+  let logo
+  if ( carrier === 'USPS' ){
+    logo = uspsLogo
+  } else if ( carrier === 'UPS' ) {
+    logo = upsLogo
+  } else if ( carrier === 'FedEx' ) {
+    logo = fedexLogo
+  } else if ( carrier === 'OnTrac' ) {
+    logo = ontracLogo
+  } else {
+    logo = null
+  }
+  const svgPath = `${logo}#svgView(preserveAspectRatio(none))`;
+  return (
+    <img src={svgPath} height="24px"/>
+    )
+}
+
+const ListPackages = ({ activePackages, archivedPackages, archivePacakge, updateAllPackages }) => {
+  updateAllPackages();
   return (
     <TabContainer defaultActiveKey="active" style={{fontSize: 10}}>
       <Tabs fill defaultActiveKey="active" id="package-tabs">
@@ -27,17 +65,26 @@ const ListPackages = ({ activePackages, archivedPackages, archivePacakge }) => {
                   (activePackages.map(pkg => {
                     return (
                       <tr key={pkg._id}>
-                        <td>{pkg.carrier}</td>
-                        <td>{pkg.trackingNumber}</td>
-                        <td>{pkg.description}</td>
-                        <td>{pkg.lastStatus}</td>
-                        <td>{pkg.lastUpdate}</td>
-                        <td>U</td>
-                        <td>X</td>
+                        <td class='align-middle'>{getLogo(pkg.carrier)}</td>
+                        <td class='align-middle'>
+                          <a 
+                            href={'' + getUrl(pkg.trackingNumber, pkg.carrier)}
+                            target='_blank'
+                          >
+                            {pkg.trackingNumber}
+                          </a>
+                        </td>
+                        <td class='align-middle'>{pkg.description}</td>
+                        <td class='align-middle'>{pkg.lastStatus}</td>
+                        <td class='align-middle'>{pkg.lastUpdate}</td>
+                        <td class='align-middle'>U</td>
+                        <td class='align-middle'>X</td>
                       </tr> 
                     )})) 
                   :
-                  <td colSpan="6">No packages found in database!</td>
+                  <tr>
+                    <td colSpan="6">No packages found in database!</td>
+                  </tr>
                 }
               </tbody>
           </Table>
@@ -61,7 +108,14 @@ const ListPackages = ({ activePackages, archivedPackages, archivePacakge }) => {
                     return (
                       <tr key={pkg._id}>
                         <td>{pkg.carrier}</td>
-                        <td>{pkg.trackingNumber}</td>
+                        <td>
+                          <a 
+                            href={'' + getUrl(pkg.trackingNumber, pkg.carrier)}
+                            target='_blank'
+                          >
+                            {pkg.trackingNumber}
+                          </a>
+                        </td>
                         <td>{pkg.description}</td>
                         <td>{pkg.lastStatus}</td>
                         <td>{pkg.lastUpdate}</td>
@@ -69,7 +123,9 @@ const ListPackages = ({ activePackages, archivedPackages, archivePacakge }) => {
                       </tr> 
                     )})) 
                   :
-                  <td colSpan="6">No packages found in database!</td>
+                  <tr>
+                    <td colSpan="6">No packages found in database!</td>
+                  </tr>
                 }
               </tbody>
           </Table>        

@@ -3,6 +3,7 @@ const router = express.Router();
 const Package = require('../models/package');
 const trackers = require('../3rd-party/trackers')
 const parsers = require('../3rd-party/parsers')
+const tc = require("timezonecomplete");
 
 router.get('/carriers', (req, res, next) => {
   // endpoint to return allowable carriers that
@@ -54,12 +55,17 @@ router.get('/packages/update/:id', (req, res, next) => {
         } else {
           stat = 'Could not parse tracker response'
         }
-        // send status in response
-        res.json({
-          carrier: data.carrier,
-          trackingNumber: data.trackingNumber,
-          status: stat
-        })
+        data.status = stat
+      })
+      .then(() => {
+        Package.updateOne(
+          {"_id": req.params.id},
+          {
+            lastStatus: data.status,
+            lastUpdate: tc.DateTime.nowLocal()
+          })
+        .then(data => res.json(data))
+        .catch(next)
       })
       .catch(results => {
         res.json({
