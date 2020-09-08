@@ -36,8 +36,9 @@ const getLogo = (carrier) => {
     logo = null
   }
   const svgPath = `${logo}#svgView(preserveAspectRatio(none))`;
+  const altText = `${carrier} logo`
   return (
-    <img src={svgPath} height="24px"/>
+    <img alt={altText} src={svgPath} height="24px"/>
     )
 }
 
@@ -73,7 +74,7 @@ const ListPackages = ({ activePackages, archivedPackages, archivePacakge, update
                         <td className='align-middle'>
                           <a 
                             href={'' + getUrl(pkg.trackingNumber, pkg.carrier)}
-                            target='_blank'
+                            target='_blank' rel="noopener noreferrer"
                           >
                             {pkg.trackingNumber}
                           </a>
@@ -113,7 +114,7 @@ const ListPackages = ({ activePackages, archivedPackages, archivePacakge, update
                         <td className='align-middle'>
                           <a 
                             href={'' + getUrl(pkg.trackingNumber, pkg.carrier)}
-                            target='_blank'
+                            target='_blank' rel="noopener noreferrer"
                           >
                             {pkg.trackingNumber}
                           </a>

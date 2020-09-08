@@ -95,7 +95,6 @@ class Input extends Component {
   }
 
   render() {
-    let { dropDownValue, carrier, trackingNumber, description } = this.state;
     return (
       <Row>
         <Col>
@@ -121,7 +120,7 @@ class Input extends Component {
               placeholder="Tracking number"
               aria-label="Tracking number"
               onChange={this.handleTrackingNumberChange}
-              value={trackingNumber}
+              value={this.state.trackingNumber}
               onKeyPress={event => {
                 if (event.key === "Enter") {
                   this.addPackage();
@@ -135,7 +134,7 @@ class Input extends Component {
                 aria-label="Description (optional)"
                 onChange={this.handleDescriptionChange}
                 id='description-input'
-                value={description}
+                value={this.state.description}
                 onKeyPress={event => {
                   if (event.key === "Enter") {
                     this.addPackage();

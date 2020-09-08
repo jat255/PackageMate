@@ -61,19 +61,12 @@ class Package extends Component {
 
   updateAllPackages = () => {
     var arrayLength = this.state.activePackages.length;
-    var promList = [];
     for (var i = 0; i < arrayLength; i++) {
         let pkg = this.state.activePackages[i];
-        promList.push(
           axios.get(`/api/packages/update/${pkg._id}`)
+          .then(() => this.getPackages())
           .catch(err => console.log(err))
-        )
     }
-    Promise.all(promList)
-      .then(() => {
-        // update packages (and list of packages displayed once we're done)
-        this.getPackages()
-      })
   }
 
   archivePackage = (id) => {
