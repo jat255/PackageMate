@@ -17,8 +17,8 @@ UPS:
  - Sign up here (free, but need a UPS account with payment method attached): https://www.ups.com/upsdeveloperkit/announcements
 
 Fedex: 
- - https://www.fedex.com/en-us/developer/web-services.html
- - Sign up here: https://www.fedex.com/en-us/developer/web-services/process.html#develop
+ - Becuase of issues with the API, Fedex package status is obtained by scraping the public website
+   (which is a little bit slower), so no API credentials are needed.
 
 ## Initial setup
 
