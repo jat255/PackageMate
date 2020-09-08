@@ -3,8 +3,8 @@ import axios from 'axios';
 
 import Input from './Input';
 import ListPackages from './ListPackages';
+import UpdateButton from './UpdateButton';
 import Container from 'react-bootstrap/Container';
-import Jumbotron from 'react-bootstrap/Jumbotron';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 
@@ -18,7 +18,7 @@ class Package extends Component {
   state = {
     activePackages: [],
     archivedPackages: [],
-    possibleCarriers: []
+    possibleCarriers: [],
   }
 
   componentDidMount() {
@@ -60,10 +60,20 @@ class Package extends Component {
   }
 
   updateAllPackages = () => {
-    this.state.activePackages.map((pkg) => {
-      axios.get(`/api/packages/update/${pkg._id}`)
-      .catch(err => console.log(err));
-    });
+    var arrayLength = this.state.activePackages.length;
+    var promList = [];
+    for (var i = 0; i < arrayLength; i++) {
+        let pkg = this.state.activePackages[i];
+        promList.push(
+          axios.get(`/api/packages/update/${pkg._id}`)
+          .catch(err => console.log(err))
+        )
+    }
+    Promise.all(promList)
+      .then(() => {
+        // update packages (and list of packages displayed once we're done)
+        this.getPackages()
+      })
   }
 
   archivePackage = (id) => {
@@ -87,10 +97,11 @@ class Package extends Component {
         <Input
           possibleCarriers={this.state.possibleCarriers}
           getPackages={this.getPackages} />{' '}
+        <UpdateButton 
+          updateAllPackages={this.updateAllPackages}/>
         <ListPackages 
           activePackages={this.state.activePackages} 
           archivedPackages={this.state.archivedPackages}
-          updateAllPackages={this.updateAllPackages}
           archivePackage={this.archivePackage} />
       </Container>
     )

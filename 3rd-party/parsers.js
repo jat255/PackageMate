@@ -64,16 +64,8 @@ const fedExParser = (response) => {
   //   Left at front door.                                  # status more details (not always present)   
   // ]
   const res = response[0];
-  console.log(`res: (${typeof(res)}) ${res}`)
-  console.log(`res[0]: ${res[0]}`)
-  console.log(`res[1]: ${res[1]}`)
-  console.log(`res[2]: ${res[2]}`)
-  console.log(`res[3]: ${res[3]}`)
-  // console.log(`results[5]: ${results[5]}`)
   let [city, state] = res[2].split(', ');
-  console.log(`city, state: ${city}, ${state}`)
   city = city.charAt(0).toUpperCase() + city.slice(1).toLowerCase();
-  console.log(`city, state: ${city}, ${state}`)
   let dateTime = new tc.DateTime(
     `${res[0]} - ${res[1]}`,
     "EEEE , M/dd/yyy - h:mm aa"

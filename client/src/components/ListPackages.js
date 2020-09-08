@@ -41,8 +41,12 @@ const getLogo = (carrier) => {
     )
 }
 
+const getLocaleDateString = (utcDate) => {
+  let d = new Date(utcDate)
+  return d.toLocaleString()
+}
+
 const ListPackages = ({ activePackages, archivedPackages, archivePacakge, updateAllPackages }) => {
-  updateAllPackages();
   return (
     <TabContainer defaultActiveKey="active" style={{fontSize: 10}}>
       <Tabs fill defaultActiveKey="active" id="package-tabs">
@@ -65,8 +69,8 @@ const ListPackages = ({ activePackages, archivedPackages, archivePacakge, update
                   (activePackages.map(pkg => {
                     return (
                       <tr key={pkg._id}>
-                        <td class='align-middle'>{getLogo(pkg.carrier)}</td>
-                        <td class='align-middle'>
+                        <td className='align-middle'>{getLogo(pkg.carrier)}</td>
+                        <td className='align-middle'>
                           <a 
                             href={'' + getUrl(pkg.trackingNumber, pkg.carrier)}
                             target='_blank'
@@ -74,11 +78,11 @@ const ListPackages = ({ activePackages, archivedPackages, archivePacakge, update
                             {pkg.trackingNumber}
                           </a>
                         </td>
-                        <td class='align-middle'>{pkg.description}</td>
-                        <td class='align-middle'>{pkg.lastStatus}</td>
-                        <td class='align-middle'>{pkg.lastUpdate}</td>
-                        <td class='align-middle'>U</td>
-                        <td class='align-middle'>X</td>
+                        <td className='align-middle'>{pkg.description}</td>
+                        <td className='align-middle'>{pkg.lastStatus}</td>
+                        <td className='align-middle'>{getLocaleDateString(pkg.lastUpdate)}</td>
+                        <td className='align-middle'>U</td>
+                        <td className='align-middle'>X</td>
                       </tr> 
                     )})) 
                   :
@@ -97,8 +101,6 @@ const ListPackages = ({ activePackages, archivedPackages, archivePacakge, update
                   <th>Tracking #</th>
                   <th>Description</th>
                   <th>Status</th>
-                  <th>Delivered Date</th>
-                  <th>Archive?</th>
                 </tr>
             </thead>
             <tbody>
@@ -107,8 +109,8 @@ const ListPackages = ({ activePackages, archivedPackages, archivePacakge, update
                   (archivedPackages.map(pkg => {
                     return (
                       <tr key={pkg._id}>
-                        <td>{pkg.carrier}</td>
-                        <td>
+                        <td className='align-middle'>{getLogo(pkg.carrier)}</td>
+                        <td className='align-middle'>
                           <a 
                             href={'' + getUrl(pkg.trackingNumber, pkg.carrier)}
                             target='_blank'
@@ -116,15 +118,13 @@ const ListPackages = ({ activePackages, archivedPackages, archivePacakge, update
                             {pkg.trackingNumber}
                           </a>
                         </td>
-                        <td>{pkg.description}</td>
-                        <td>{pkg.lastStatus}</td>
-                        <td>{pkg.lastUpdate}</td>
-                        <td>X</td>
+                        <td className='align-middle'>{pkg.description}</td>
+                        <td className='align-middle'>{pkg.lastStatus}</td>
                       </tr> 
                     )})) 
                   :
                   <tr>
-                    <td colSpan="6">No packages found in database!</td>
+                    <td colSpan="4">No packages found in database!</td>
                   </tr>
                 }
               </tbody>
