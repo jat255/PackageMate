@@ -13,7 +13,7 @@ class UpdateButton extends Component {
         <Col >
           <Button 
             id='updateButton' 
-            variant='success'
+            variant='outline-success'
             onClick={this.props.updateAllPackages}>
             <FontAwesomeIcon icon={faSyncAlt}/>
             <span style={{marginLeft: 0.75 + 'em'}}>Update package statuses</span>
