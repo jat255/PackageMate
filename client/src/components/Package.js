@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
+import 'ladda/dist/ladda-themeless.min.css';
+
 import Input from './Input';
 import ListPackages from './ListPackages';
 import UpdateButton from './UpdateButton';
@@ -19,6 +21,7 @@ class Package extends Component {
     activePackages: [],
     archivedPackages: [],
     possibleCarriers: [],
+    updateProgress: 0.0
   }
 
   componentDidMount() {
@@ -61,12 +64,30 @@ class Package extends Component {
 
   updateAllPackages = () => {
     var arrayLength = this.state.activePackages.length;
+    var numFinished = 0.0
+    var promList = []
+    this.setState({
+      loading: true
+    })
     for (var i = 0; i < arrayLength; i++) {
         let pkg = this.state.activePackages[i];
-          axios.get(`/api/packages/update/${pkg._id}`)
-          .then(() => this.getPackages())
-          .catch(err => console.log(err))
+        let p = axios.get(`/api/packages/update/${pkg._id}`)
+        promList.push(p)
+        p.then(() => {
+          this.getPackages()
+          numFinished += 1
+          this.setState({
+            updateProgress: numFinished / arrayLength
+          })
+        })
+        .catch(err => console.log(err))
     }
+    Promise.all(promList)
+      .then(() => {
+        this.setState({
+          loading: false
+        })
+      })
   }
 
   archivePackage = (id) => {
@@ -91,7 +112,9 @@ class Package extends Component {
           possibleCarriers={this.state.possibleCarriers}
           getPackages={this.getPackages} />{' '}
         <UpdateButton 
-          updateAllPackages={this.updateAllPackages}/>
+          updateProgress={this.state.updateProgress}
+          updateAllPackages={this.updateAllPackages}
+          loading={this.state.loading} />
         <ListPackages 
           activePackages={this.state.activePackages} 
           archivedPackages={this.state.archivedPackages}
