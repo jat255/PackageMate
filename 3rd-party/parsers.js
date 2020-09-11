@@ -77,7 +77,25 @@ const fedExParser = (response) => {
 }
 
 const onTracParser = (response) => {
-  return 'OnTrac parser not yet implemented';
+  var tc = require("timezonecomplete");
+  
+  // response format:
+  // [
+  //   09/08/20,                                # date
+  //   05:03PM,                                 # time
+  //   Delivered                                # status
+  //   BOULDER, CO                              # location
+  // ]
+  const res = response[0];
+  let [city, state] = res[3].split(', ');
+  city = city.charAt(0).toUpperCase() + city.slice(1).toLowerCase();
+  let dateTime = new tc.DateTime(
+    `${res[0]} - ${res[1]}`,
+    "MM/dd/yy - hh:mmaa"
+  )
+
+  let stat = `${city}, ${state} (${dateTime.format("yyyy-MM-dd hh:mm a")}) - ${res[2]}`
+  return stat;
 }
 
 parsers = {

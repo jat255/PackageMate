@@ -48,7 +48,32 @@ const fedExTracker = (trackingNumber) => {
 }
 
 const onTracTracker = (trackingNumber) => {
-  return Promise.reject(`OnTrac tracking not yet implemented`);
+  const url = `https://www.ontrac.com/trackingresults.asp?tracking_number=${trackingNumber}`;
+
+  // async function to scrape status from ontrac website (since API is
+  // unavailable...)
+  return (async () => {
+    const browser = await playwright.chromium.launch();
+  const page = await browser.newPage();
+  await page.goto(url);
+  
+  // Click on "See Details link"
+  const DETAILS_SELECTOR = 'div.trackNumber a';
+  await page.waitForSelector(DETAILS_SELECTOR)
+  const results = await page.$(DETAILS_SELECTOR);
+  results.click();
+
+  // Get most recent event
+  const EVENT_SELECTOR = '//tbody[@id="OnTracEvents"]/tr'
+  await page.waitForSelector(EVENT_SELECTOR)
+  const results2 = await page.$(EVENT_SELECTOR);
+  const text = await results2.evaluate(element => element.innerText);
+  let res = text.split(/[\n\t]+/)
+  res = res.slice(0, res.length - 1)
+  console.log(res)
+  return res;
+  // Returns array of ["date", "time", "status", "location"]
+  })();
 }
 
 trackers = {

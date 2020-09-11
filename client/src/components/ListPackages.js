@@ -24,7 +24,7 @@ const getUrl = (trackingNumber, carrier) => {
   } else if ( carrier === 'FedEx' ) {
     return `https://www.fedex.com/apps/fedextrack/?tracknumbers=${trackingNumber}&locale=en_US`
   } else {
-    return null
+    return `https://www.ontrac.com/trackingresults.asp?tracking_number=${trackingNumber}`
   }
 }
 
@@ -107,7 +107,7 @@ const ListPackages = ({ activePackages, archivedPackages, archivePackage, update
                     )})) 
                   :
                   <tr>
-                    <td colSpan="6">No packages found in database!</td>
+                    <td colSpan="7">No active packages found in database!</td>
                   </tr>
                 }
               </tbody>
@@ -120,13 +120,17 @@ const ListPackages = ({ activePackages, archivedPackages, archivePackage, update
                   <th>Carrier</th>
                   <th>Tracking #</th>
                   <th>Description</th>
+                  <th>Date</th>
                   <th>Status</th>
                 </tr>
             </thead>
             <tbody>
               {
                   archivedPackages && archivedPackages.length > 0 ?
-                  (archivedPackages.map(pkg => {
+                  (archivedPackages.sort((a, b) => {
+                    // sort in descending order (newest first)
+                    return new Date(b.lastUpdate) - new Date(a.lastUpdate);
+                    }).map(pkg => {
                     return (
                       <tr key={pkg._id}>
                         <td className='align-middle'>{getLogo(pkg.carrier)}</td>
@@ -139,6 +143,7 @@ const ListPackages = ({ activePackages, archivedPackages, archivePackage, update
                           </a>
                         </td>
                         <td className='align-middle'>{pkg.description}</td>
+                        <td className='align-middle'>{getLocaleDateString(pkg.lastUpdate)}</td>
                         <td className='align-middle'>{pkg.lastStatus}</td>
                       </tr> 
                     )})) 
