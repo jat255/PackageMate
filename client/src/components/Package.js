@@ -12,7 +12,6 @@ import Col from 'react-bootstrap/Col'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShippingFast } from '@fortawesome/free-solid-svg-icons'
-import { DateTime } from 'timezonecomplete';
 
 // This is the main app component
 

@@ -4,7 +4,7 @@ import Tab from 'react-bootstrap/Tab'
 import TabContainer from 'react-bootstrap/TabContainer'
 import Table from 'react-bootstrap/Table'
 
-import LaddaButton, { XS, ZOOM_OUT } from 'react-ladda';
+import LaddaButton, { XS } from 'react-ladda';
 
 import uspsLogo from '../img/usps.svg'
 import fedexLogo from '../img/fedex.svg'
@@ -58,7 +58,7 @@ const ListPackages = ({ activePackages, archivedPackages, archivePackage, update
     <TabContainer defaultActiveKey="active" style={{fontSize: 10}}>
       <Tabs fill defaultActiveKey="active" id="package-tabs">
         <Tab eventKey="active" title="Active">
-          <Table striped hover size="sm" style={{fontSize: 12}}>
+          <Table responsive striped hover size="sm" style={{fontSize: 12}}>
           <thead>
                 <tr>
                   <th>Carrier</th>
