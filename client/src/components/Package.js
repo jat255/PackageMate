@@ -5,13 +5,14 @@ import 'ladda/dist/ladda-themeless.min.css';
 
 import Input from './Input';
 import ListPackages from './ListPackages';
-import UpdateButton from './UpdateButton';
+import UpdateAllButton from './UpdateAllButton';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShippingFast } from '@fortawesome/free-solid-svg-icons'
+import { DateTime } from 'timezonecomplete';
 
 // This is the main app component
 
@@ -62,6 +63,10 @@ class Package extends Component {
       .catch(err => console.log(err))
   }
 
+  updateOnePackage = (pkg) => {
+    return axios.get(`/api/packages/update/${pkg._id}`)
+  }
+
   updateAllPackages = () => {
     var arrayLength = this.state.activePackages.length;
     var numFinished = 0.0
@@ -69,17 +74,20 @@ class Package extends Component {
     this.setState({
       loading: true
     })
-    for (var i = 0; i < arrayLength; i++) {
+
+    var updateNum = () => {
+      this.getPackages();
+      numFinished += 1;
+      this.setState({
+        updateProgress: numFinished / arrayLength
+      })
+    }
+
+    for (let i = 0; i < arrayLength; i++) {
         let pkg = this.state.activePackages[i];
         let p = axios.get(`/api/packages/update/${pkg._id}`)
         promList.push(p)
-        p.then(() => {
-          this.getPackages()
-          numFinished += 1
-          this.setState({
-            updateProgress: numFinished / arrayLength
-          })
-        })
+        p.then(() => updateNum())
         .catch(err => console.log(err))
     }
     Promise.all(promList)
@@ -111,14 +119,16 @@ class Package extends Component {
         <Input
           possibleCarriers={this.state.possibleCarriers}
           getPackages={this.getPackages} />{' '}
-        <UpdateButton 
+        <UpdateAllButton 
           updateProgress={this.state.updateProgress}
           updateAllPackages={this.updateAllPackages}
           loading={this.state.loading} />
         <ListPackages 
           activePackages={this.state.activePackages} 
           archivedPackages={this.state.archivedPackages}
-          archivePackage={this.archivePackage} />
+          archivePackage={this.archivePackage}
+          updateOnePackage={this.updateOnePackage}
+          getPackages={this.getPackages} />
       </Container>
     )
   }

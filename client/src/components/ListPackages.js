@@ -4,11 +4,17 @@ import Tab from 'react-bootstrap/Tab'
 import TabContainer from 'react-bootstrap/TabContainer'
 import Table from 'react-bootstrap/Table'
 
+import LaddaButton, { XS, ZOOM_OUT } from 'react-ladda';
+
 import uspsLogo from '../img/usps.svg'
 import fedexLogo from '../img/fedex.svg'
 import upsLogo from '../img/ups.svg'
 import ontracLogo from '../img/ontrac.svg'
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBoxOpen } from '@fortawesome/free-solid-svg-icons'
+
+import UpdateOnePackage from './UpdateOneButton'
 
 const getUrl = (trackingNumber, carrier) => {
   if ( carrier === 'USPS' ){
@@ -47,7 +53,7 @@ const getLocaleDateString = (utcDate) => {
   return d.toLocaleString()
 }
 
-const ListPackages = ({ activePackages, archivedPackages, archivePacakge, updateAllPackages }) => {
+const ListPackages = ({ activePackages, archivedPackages, archivePackage, updateOnePackage, getPackages }) => {
   return (
     <TabContainer defaultActiveKey="active" style={{fontSize: 10}}>
       <Tabs fill defaultActiveKey="active" id="package-tabs">
@@ -82,8 +88,21 @@ const ListPackages = ({ activePackages, archivedPackages, archivePacakge, update
                         <td className='align-middle'>{pkg.description}</td>
                         <td className='align-middle'>{pkg.lastStatus}</td>
                         <td className='align-middle'>{getLocaleDateString(pkg.lastUpdate)}</td>
-                        <td className='align-middle'>U</td>
-                        <td className='align-middle'>X</td>
+                        <td className='align-middle'>
+                          <UpdateOnePackage 
+                            pkg={pkg}
+                            updateOnePackage={updateOnePackage}
+                            getPackages={getPackages}
+                          />
+                        </td>
+                        <td className='align-middle'>
+                          <LaddaButton 
+                            onClick={() => archivePackage(pkg._id)}
+                            data-size={XS}
+                            className='btn btn-outline-danger'>
+                            <FontAwesomeIcon icon={faBoxOpen}/>
+                          </LaddaButton>
+                        </td>
                       </tr> 
                     )})) 
                   :
@@ -133,23 +152,6 @@ const ListPackages = ({ activePackages, archivedPackages, archivePacakge, update
           </Tab>
       </Tabs>
     </TabContainer>
-    // <ListGroup>
-    //     {
-    //       todos &&
-    //         todos.length > 0 ?
-    //           (
-    //             todos.map(todo => {
-    //                 return (
-    //                     <ListGroup.Item key={todo._id} onClick={() => deleteTodo(todo._id)}>{todo.action}</ListGroup.Item>
-    //                 )
-    //             })
-    //           )
-    //           :
-    //           (
-    //             <ListGroup.Item variant='warning'>No packages have been tracked!</ListGroup.Item>
-    //           )
-    //     }
-    // </ListGroup>
   )
 }
 

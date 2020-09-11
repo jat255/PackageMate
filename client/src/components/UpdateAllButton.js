@@ -8,7 +8,7 @@ import LaddaButton, { S, EXPAND_RIGHT } from 'react-ladda';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSyncAlt } from '@fortawesome/free-solid-svg-icons'
 
-class UpdateButton extends Component {
+class UpdateAllButton extends Component {
 
   toggle = () => {
     this.props.updateAllPackages();
@@ -32,7 +32,7 @@ class UpdateButton extends Component {
             className="btn btn-info"
           >
             <FontAwesomeIcon icon={faSyncAlt}/>
-            <span style={{marginLeft: 0.75 + 'em', marginTop: -0.5 + 'em'}}>Update package statuses</span>
+            <span style={{marginLeft: 0.75 + 'em', marginTop: -0.5 + 'em'}}>Update all package statuses</span>
           </LaddaButton>
 
         </Col>
@@ -41,4 +41,4 @@ class UpdateButton extends Component {
   }
 }
 
-export default UpdateButton
+export default UpdateAllButton
