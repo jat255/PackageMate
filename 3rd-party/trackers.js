@@ -70,7 +70,6 @@ const onTracTracker = (trackingNumber) => {
   const text = await results2.evaluate(element => element.innerText);
   let res = text.split(/[\n\t]+/)
   res = res.slice(0, res.length - 1)
-  console.log(res)
   return res;
   // Returns array of ["date", "time", "status", "location"]
   })();
