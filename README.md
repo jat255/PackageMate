@@ -6,10 +6,13 @@ This is a simple app using MongoDB, Express.js, React, and Node to allow a user
 to create _package_ records and fetch their status from the carriers' APIs
 (or scraping, sometimes).
 
+**Note:** This app was made as a learning experience, so it certainly has some roughness
+around the edges, and I'm not responsible if it causes your package to burst into flames...
+
 It requires access to the carriers' API tools, which differs a bit for each carrier. The
 following links have more information on how to create accounts and get credientials.
 
-### Tracking APIs:
+## Tracking APIs:
 
 USPS: 
   - https://www.usps.com/business/web-tools-apis/track-and-confirm-api_files/track-and-confirm-api.htm#_Toc41911503
@@ -97,7 +100,7 @@ Then to remove the `dbdata` volume:
 $ docker volume rm package_tracker_dbdata 
 ```
 
-### Using the app
+## Using the app
 
 When you visit the app for the first time, there will be no packages in the system, so
 the display will be empty:
