@@ -1,8 +1,8 @@
 {
-  "name": "client",
-  "version": "0.1.0",
+  "name": "packagemate-client",
+  "version": "1.0.0",
   "private": true,
-  "proxy": "http://package-tracker-server:5000",
+  "proxy": "http://packagemate-server:5000",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.30",
     "@fortawesome/free-brands-svg-icons": "^5.14.0",

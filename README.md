@@ -55,7 +55,7 @@ the browser.
 
 ```sh
 $ git clone https://github.com/jat255/PackageMate.git
-$ cd package_tracker
+$ cd PackageMate
 ```
 
 Once this has downloaded, rename the `.env.example` file to `.env`, and replace the values 
@@ -104,7 +104,7 @@ $ docker volume list
 Then to remove the `dbdata` volume:
 
 ```sh
-$ docker volume rm package_tracker_dbdata 
+$ docker volume rm packagemate_dbdata 
 ```
 
 ## Using the app

@@ -1,12 +1,12 @@
 version: '3'
 
 services:
-  package-tracker-server:
+  packagemate-server:
     build:
       context: .
       dockerfile: Dockerfile
-    image: package-tracker-server
-    container_name: package-tracker-server
+    image: packagemate-server
+    container_name: packagemate-server
     restart: unless-stopped
     env_file: .env
     environment:
@@ -26,16 +26,16 @@ services:
     # this will work as long as you haven't changed the mongodb port from the default
     # if you have, change it here as well
     command: ./wait-for.sh db:27017 -- npm start
-  package-tracker-client:
+  packagemate-client:
     build:
       context: client
       dockerfile: Dockerfile
-    image: package-tracker-client
-    container_name: package-tracker-client
+    image: packagemate-client
+    container_name: packagemate-client
     restart: unless-stopped
     env_file: .env
     depends_on: 
-      - package-tracker-server
+      - packagemate-server
       - db
     environment:
       - MONGO_USERNAME=$MONGO_USERNAME

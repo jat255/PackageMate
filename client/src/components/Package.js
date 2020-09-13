@@ -122,7 +122,7 @@ class Package extends Component {
             <Button
               id='github-btn'
               variant='outline-dark'
-              href='https://github.com/jat255/package_tracker'
+              href='https://github.com/jat255/PackageMate'
               size='sm'
               target='_blank'
               >

@@ -1,7 +1,7 @@
 {
-  "name": "package_tracker",
+  "name": "packagemate-server",
   "version": "1.0.0",
-  "description": "A package tracking app",
+  "description": "A self-hosted package tracking app",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
