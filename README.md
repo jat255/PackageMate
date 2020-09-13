@@ -10,17 +10,23 @@ to create _package_ records and fetch their status from the carriers' APIs
 around the edges, and I'm not responsible if it causes your package to burst into flames...
 
 It requires access to the carriers' API tools, which differs a bit for each carrier. The
-following links have more information on how to create accounts and get credientials.
+following links have more information on how to create accounts and get credentials.
+Some of the carriers have unstable (or unavailable) APIs, and so a web scraping approach
+is used (currently for FedEx and Ontrac). This means these carriers take slightly longer to 
+update, depending on how quickly the website responds, but they should eventually update.
 
 ## Tracking APIs:
 
 USPS: 
   - https://www.usps.com/business/web-tools-apis/track-and-confirm-api_files/track-and-confirm-api.htm#_Toc41911503
   - Sign up here (free): https://www.usps.com/business/web-tools-apis/documentation-updates.htm
+  - Once you get it, put your USPS "username" that they provide into `.env` in the proper place
 
 UPS: 
  - https://www.ups.com/upsdeveloperkit/
  - Sign up here (free, but need a UPS account with payment method attached): https://www.ups.com/upsdeveloperkit/announcements
+ - It took a while (about a day) when I signed up for my "account" to show in the list on the
+   developer kit signup page, but once you sign up, place the UPS "Access key" into `.env`
 
 Fedex: 
  - Becuase of issues with the API, Fedex package status is obtained by scraping the public website
