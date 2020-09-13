@@ -30,6 +30,7 @@ const upsParser = (response) => {
   var tc = require("timezonecomplete");
 
   let city = `${lastActivity.location.address.city}`
+  city = city.charAt(0).toUpperCase() + city.slice(1).toLowerCase();
   let state = `${lastActivity.location.address.stateProvince}`
   let desc = `${lastActivity.status.description}`
   let dateRegex = /(\d{4})(\d{2})(\d{2})/;
