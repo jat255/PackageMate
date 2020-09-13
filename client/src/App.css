@@ -47,7 +47,7 @@ a#package-tabs-tab-archived.active {
   border-bottom-color:#533f03;
 }
 
-#updateButton {
+#updateButton, #github-btn {
   margin-bottom:1em;
 }
 

@@ -149,7 +149,7 @@ const ListPackages = ({ activePackages, archivedPackages, archivePackage, update
                     )})) 
                   :
                   <tr>
-                    <td colSpan="4">No packages found in database!</td>
+                    <td colSpan="5">No packages found in database!</td>
                   </tr>
                 }
               </tbody>

@@ -13,6 +13,23 @@ import { faUsps } from '@fortawesome/free-brands-svg-icons'
 import { faFedex } from '@fortawesome/free-brands-svg-icons'
 import { faUps } from '@fortawesome/free-brands-svg-icons'
 
+
+// code to wait for an element to be present
+// from https://stackoverflow.com/a/47776379
+function rafAsync() {
+  return new Promise(resolve => {
+      requestAnimationFrame(resolve); //faster than set time out
+  });
+}
+async function waitForElement(selector) {
+  let querySelector = document.querySelector(selector);
+  while (querySelector === null) {
+      querySelector = document.querySelector(selector);
+      await rafAsync()
+  }
+  return querySelector;
+}  
+
 class Input extends Component {
   state = {
     dropDownValue: "Carrier",
@@ -44,6 +61,15 @@ class Input extends Component {
               description: "",
               dropDownValue: "Carrier"
             })
+            // this is hacky and dumb, but we wait for the new button
+            // to be added to the package list and then click the update button
+            // so we get some progress indication (rather than just making)
+            // a call to the API. There's surely a way to do this in react I don't
+            // know about
+            waitForElement(`#updateButton-${res.data._id}`) //use whichever selector you want
+              .then(() => {
+                  document.getElementById(`updateButton-${res.data._id}`).click()
+              });
           }
         })
         .catch(err => console.log(err))

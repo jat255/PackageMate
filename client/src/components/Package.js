@@ -9,9 +9,11 @@ import UpdateAllButton from './UpdateAllButton';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
+import Button from 'react-bootstrap/Button'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShippingFast } from '@fortawesome/free-solid-svg-icons'
+import { faGithub } from '@fortawesome/free-brands-svg-icons'
 
 // This is the main app component
 
@@ -113,6 +115,19 @@ class Package extends Component {
         <Row>
           <Col>
             <h1 className="header"><FontAwesomeIcon icon={faShippingFast} /> Auto-Package Tracker</h1>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Button
+              id='github-btn'
+              variant='outline-dark'
+              href='https://github.com/jat255/package_tracker'
+              size='sm'
+              target='_blank'
+              >
+                <FontAwesomeIcon icon={faGithub} /> View project on GitHub
+            </Button>
           </Col>
         </Row>
         <Input

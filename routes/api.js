@@ -43,6 +43,7 @@ router.get('/packages/update/:id', (req, res, next) => {
       }
       // once the promise has returned, parse the result (method depends on carrier)
       Promise.all([r])
+      .catch(err => console.error(err))
       .then(results => {
         if ( data.carrier === 'USPS' ){
           stat = parsers.usps(results);
