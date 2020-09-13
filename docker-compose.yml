@@ -1,0 +1,81 @@
+version: '3'
+
+services:
+  package-tracker-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: package-tracker-server
+    container_name: package-tracker-server
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - MONGO_USERNAME=$MONGO_USERNAME
+      - MONGO_PASSWORD=$MONGO_PASSWORD
+      - MONGO_HOSTNAME=db
+      - MONGO_PORT=$MONGO_PORT
+      - MONGO_DB=$MONGO_DB 
+      - UPS_ACCESS_KEY=$UPS_ACCESS_KEY
+      - USPS_USERNAME=$USPS_USERNAME
+    volumes:
+      - .:/home/node/app
+      - node_modules:/home/node/app/node_modules
+      - client_node_modules:/home/node/app/client/node_modules
+    networks:
+      - app-network
+    # this will work as long as you haven't changed the mongodb port from the default
+    # if you have, change it here as well
+    command: ./wait-for.sh db:27017 -- npm start
+  package-tracker-client:
+    build:
+      context: client
+      dockerfile: Dockerfile
+    image: package-tracker-client
+    container_name: package-tracker-client
+    restart: unless-stopped
+    env_file: .env
+    depends_on: 
+      - package-tracker-server
+      - db
+    environment:
+      - MONGO_USERNAME=$MONGO_USERNAME
+      - MONGO_PASSWORD=$MONGO_PASSWORD
+      - MONGO_HOSTNAME=db
+      - MONGO_PORT=$MONGO_PORT
+      - MONGO_DB=$MONGO_DB 
+      - UPS_ACCESS_KEY=$UPS_ACCESS_KEY
+      - USPS_USERNAME=$USPS_USERNAME
+    ports:
+      # this is the port of the main app, by default, port 80 is
+      # exposed on the host machine (localhost or 127.0.0.1)
+      - "80:3000"
+    volumes:
+      - .:/home/node/app
+      - node_modules:/home/node/app/node_modules
+      - client_node_modules:/home/node/app/client/node_modules
+    networks:
+      - app-network
+    command: npm start
+    stdin_open: true
+  db:
+    image: mongo:4.1.8-xenial
+    container_name: db
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=$MONGO_USERNAME
+      - MONGO_INITDB_ROOT_PASSWORD=$MONGO_PASSWORD
+    volumes:  
+      - dbdata:/data/db   
+    networks:
+      - app-network 
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  dbdata:
+  node_modules: 
+  client_node_modules:
+  

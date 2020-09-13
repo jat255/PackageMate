@@ -9,10 +9,27 @@ const app = express()
 
 const port = process.env.PORT || 5000;
 
+const {
+  MONGO_USERNAME,
+  MONGO_PASSWORD,
+  MONGO_HOSTNAME,
+  MONGO_PORT,
+  MONGO_DB
+} = process.env;
+  
+const options = {
+  useNewUrlParser: true,
+  reconnectTries: Number.MAX_VALUE,
+  reconnectInterval: 500, 
+  connectTimeoutMS: 10000,
+};
+
+const url = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}?authSource=admin`;
+
 // connect to the mongoDB database
-mongoose.connect(process.env.DB, {useNewUrlParser: true})
+mongoose.connect(url, options)
   .then(() => console.log('Database connected successfully'))
-  .catch(err => console.log(err));
+  .catch(err => console.error(err));
 
 // since mongoose promis is deprecated, overwrite it with node Promise
 mongoose.Promise = global.Promise;
