@@ -114,7 +114,7 @@ class Package extends Component {
       <Container fluid className="p-3">
         <Row>
           <Col>
-            <h1 className="header"><FontAwesomeIcon icon={faShippingFast} /> Auto-Package Tracker</h1>
+            <h1 className="header"><FontAwesomeIcon icon={faShippingFast} /> PackageMate <FontAwesomeIcon icon={faShippingFast} /></h1>
           </Col>
         </Row>
         <Row>

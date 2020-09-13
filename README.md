@@ -1,13 +1,13 @@
-# Self-hosted package tracking
-
 ![animated demo of the client application](img/demo.gif)
+<p align="center"><em>PackageMate: Self-hosted package tracking!</em></p>
 
 This is a simple app using MongoDB, Express.js, React, and Node to allow a user
 to create _package_ records and fetch their status from the carriers' APIs
 (or scraping, sometimes).
 
-**Note:** This app was made as a learning experience, so it certainly has some roughness
-around the edges, and I'm not responsible if it causes your package to burst into flames...
+**Note:** This app was made as a full-stack app learning experience, so it certainly has some 
+roughness around the edges, and I'm not responsible if it causes your packages to burst into 
+flames...
 
 It requires access to the carriers' API tools, which differs a bit for each carrier. The
 following links have more information on how to create accounts and get credentials.
@@ -29,7 +29,8 @@ UPS:
    developer kit signup page, but once you sign up, place the UPS "Access key" into `.env`
 
 Fedex: 
- - Becuase of issues with the API, Fedex package status is obtained by scraping the public website
+ - Becuase of issues with the API (all my attempts resulted in the API returning outdated
+   information), Fedex package status is obtained by scraping the public website
    (which is a little bit slower), so no API credentials are needed. 
    [Playwright](https://github.com/microsoft/playwright) is used for the scraping.
 
@@ -53,7 +54,7 @@ the browser.
 ### Clone or download the project using git:
 
 ```sh
-$ git clone https://github.com/jat255/package_tracker.git
+$ git clone https://github.com/jat255/PackageMate.git
 $ cd package_tracker
 ```
 
@@ -141,3 +142,13 @@ To stop tracking a package, click the red
 "archive" button for that package. The 
 package will be moved to the "Archived" tab,
 and will no longer be included in any updates.
+
+## How to contribute?
+
+Pull requests and feature additions are always welcome! In particular, 
+PackageMate only supports four carriers, currently (the ones that I
+receive packages through most often). If there's another carrier
+that you would like to support, it should be added to the database
+model in `models/package.js` (the `carrier` enum), the update function
+in `routes/api.js`, and then in `3rd-party/trackers.js` and 
+`3rd-party/parsers.js`.
