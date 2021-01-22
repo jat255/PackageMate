@@ -1,6 +1,6 @@
 {
   "name": "packagemate-server",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A self-hosted package tracking app",
   "main": "index.js",
   "scripts": {
@@ -19,7 +19,7 @@
     "jsdom": "^16.4.0",
     "mongoose": "^5.10.3",
     "mquery": ">=3.2.3",
-    "playwright": "^1.4.0",
+    "playwright": "^1.8.0",
     "timezonecomplete": "^5.11.2",
     "yarn": "^1.22.5"
   },

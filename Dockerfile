@@ -8,6 +8,8 @@ WORKDIR /home/node/app
 COPY package*.json ./
 USER node
 RUN npm install
+RUN npm install playwright
 COPY --chown=node:node . .
+ENV  DEBUG=pw:api 
 
 CMD [ "node", "index.js" ]
