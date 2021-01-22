@@ -30,6 +30,7 @@ router.get('/packages/update/:id', (req, res, next) => {
   // update a package's status via third-party API
   Package.findById(req.params.id)
     .then(data => {
+      // console.log(`Getting tracker for ${data.carrier}`)
       if ( data.carrier === 'USPS' ){
         r = trackers.usps(data.trackingNumber);
       } else if ( data.carrier === 'FedEx') {
@@ -45,6 +46,7 @@ router.get('/packages/update/:id', (req, res, next) => {
       Promise.all([r])
       .catch(err => console.error(err))
       .then(results => {
+        // console.log(`results: ${results}`)
         if ( data.carrier === 'USPS' ){
           stat = parsers.usps(results);
         } else if ( data.carrier === 'FedEx') {

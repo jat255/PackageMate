@@ -57,23 +57,37 @@ const fedExParser = (response) => {
   var tc = require("timezonecomplete");
 
   // response format:
-  // [
-  //   Saturday , 7/11/2020,                                # date
-  //   10:03 am,                                            # time
-  //   Boulder, CO,                                         # location
-  //   Delivered,                                           # status
-  //   Left at front door.                                  # status more details (not always present)   
-  // ]
-  const res = response[0];
-  let [city, state] = res[2].split(', ');
+  //  [
+  //    'Thursday, January 21, 2021',
+  //    '9:09 PM\tDENVER, CO\t',
+  //    'In transit',
+  //    'Tuesday, January 19, 2021',
+  //    '12:00 AM\tHAMMOND, IN\t',
+  //    'Picked up',
+  //    'Expand History'
+  //  ]
+  // first three values are the latest status
+  // console.log(`response: ${response}`)
+  const res = response[0]
+  const dayAndDate = res[0];
+  // console.log(`dayAndDate: ${dayAndDate}`)
+  const timeAndLocation = res[1];
+  // console.log(`timeAndLocation: ${timeAndLocation}`)
+  const details = res[2];
+  // console.log(`details: ${details}`)
+  let [time, cityState] = timeAndLocation.split('\t')
+  // console.log(`time: ${time}; cityState: ${cityState};`)
+  let [city, state] = cityState.split(', ');
+  // console.log(`city: ${city}; state: ${state}`)
   city = city.charAt(0).toUpperCase() + city.slice(1).toLowerCase();
+  // console.log(`city: ${city}`)
   let dateTime = new tc.DateTime(
-    `${res[0]} - ${res[1]}`,
-    "EEEE , M/dd/yyy - h:mm aa"
+    `${dayAndDate} - ${time}`,
+    "EEEE, MMMM d, yyyy - h:mm aa"
   )
-  let details = res[3] + (res.length > 4 ? `: ${res[4]}` : '')
-
+  // console.log(`dateTime: ${dateTime}`)
   let stat = `${city}, ${state} (${dateTime.format("yyyy-MM-dd hh:mm a")}) - ${details}`
+  // console.log(`stat: ${stat}`)
   return stat;
 }
 

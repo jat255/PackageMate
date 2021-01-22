@@ -34,11 +34,12 @@ const fedExTracker = (trackingNumber) => {
     const browser = await playwright.chromium.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']});
     const page = await browser.newPage();
     await page.goto(url);
-    const STATUS_SELECTOR = 'ul.redesignTravelHistory';
+    const STATUS_SELECTOR = 'table.travel-history-table';
     await page.waitForSelector(STATUS_SELECTOR);
     const results = await page.$(STATUS_SELECTOR);
     const text = await results.evaluate(element => element.innerText);
     const res = text.split('\n')
+    // console.log(res);
     await browser.close();
     return res;
   })();
