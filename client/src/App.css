@@ -74,6 +74,6 @@ a#package-tabs-tab-archived.active {
 }
 
 .detail-cell {
-  line-height: 0.6rem;
+  line-height: 1rem;
   white-space: pre-wrap;
 }
