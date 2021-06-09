@@ -72,3 +72,8 @@ a#package-tabs-tab-archived.active {
   } */
 
 }
+
+.detail-cell {
+  line-height: 0.6rem;
+  white-space: pre-wrap;
+}

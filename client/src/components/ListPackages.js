@@ -91,7 +91,7 @@ const ListPackages = ({ activePackages, archivedPackages, archivePackage, update
                           </a>
                         </td>
                         <td className='align-middle'>{pkg.description}</td>
-                        <td className='align-middle'>{pkg.lastStatus}</td>
+                        <td className='align-middle detail-cell'>{pkg.lastStatus}</td>
                         <td className='align-middle'>{getLocaleDateString(pkg.lastUpdate)}</td>
                         <td className='align-middle'>
                           <UpdateOnePackage 

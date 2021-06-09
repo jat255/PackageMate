@@ -79,14 +79,15 @@ const fedExParser = (response) => {
   // console.log(`time: ${time}; cityState: ${cityState};`)
   let [city, state] = cityState.split(', ');
   // console.log(`city: ${city}; state: ${state}`)
-  city = city.charAt(0).toUpperCase() + city.slice(1).toLowerCase();
+  city = titleCase(city);
   // console.log(`city: ${city}`)
   let dateTime = new tc.DateTime(
     `${dayAndDate} - ${time}`,
     "EEEE, MMMM d, yyyy - h:mm aa"
   )
   // console.log(`dateTime: ${dateTime}`)
-  let stat = `${city}, ${state} (${dateTime.format("yyyy-MM-dd hh:mm a")}) - ${details}`
+  let stat = `${city}, ${state} (${dateTime.format("yyyy-MM-dd hh:mm a")}) - ${details}
+              Expected: ${res[res.length - 1]}`;
   // console.log(`stat: ${stat}`)
   return stat;
 }
@@ -109,7 +110,7 @@ const onTracParser = (response) => {
     "MM/dd/yy - hh:mmaa"
   )
 
-  let stat = `${city}, ${state} (${dateTime.format("yyyy-MM-dd hh:mm a")}) - ${res[2]}`
+  let stat = `${city}, ${state} (${dateTime.format("yyyy-MM-dd hh:mm a")}) - ${res[2]}`;
   return stat;
 }
 
@@ -180,6 +181,12 @@ const amazonParser = (response) => {
   let stat = `${city}${state} (${dateStr}) - ${eventCode}${eddStr}`
   console.debug(`Status is "${stat}"`)
   return stat;
+}
+
+function titleCase(str) {
+  return str.toLowerCase().split(' ').map(function(word) {
+    return word.replace(word[0], word[0].toUpperCase());
+  }).join(' ');
 }
 
 parsers = {

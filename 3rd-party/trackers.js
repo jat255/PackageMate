@@ -35,10 +35,20 @@ const fedExTracker = (trackingNumber) => {
     const page = await browser.newPage();
     await page.goto(url);
     const STATUS_SELECTOR = 'table.travel-history-table';
+    const DELIVERY_DATE_SELECTOR = '[data-test-id=delivery-date-text]';
     await page.waitForSelector(STATUS_SELECTOR);
-    const results = await page.$(STATUS_SELECTOR);
-    const text = await results.evaluate(element => element.innerText);
-    const res = text.split('\n')
+    let results = await page.$(STATUS_SELECTOR);
+    let text = await results.evaluate(element => element.innerText);
+    let res = text.split('\n')
+
+    // get expected delivery date
+    await page.waitForSelector(DELIVERY_DATE_SELECTOR)
+    results = await page.$(DELIVERY_DATE_SELECTOR);
+    text = await results.evaluate(element => element.innerText);
+    if (text) {
+      res.push(text);
+    }
+
     // console.log(res);
     await browser.close();
     return res;
