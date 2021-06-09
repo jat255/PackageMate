@@ -4,7 +4,7 @@ const playwright = require('playwright');
 const uspsTracker = (trackingNumber) => {
   let url = "https://secure.shippingapis.com/ShippingAPI.dll?API=TrackV2&XML=";
   let xml = `<TrackRequest USERID=\"${process.env.USPS_USERNAME}\"><TrackID ID=\"${trackingNumber}\"></TrackID></TrackRequest>`
-  
+  console.debug(`Using url ${url} with  xml ${xml}`);
   return axios.get(`${url}${xml}`)
     .then(res => {
       return res.data
@@ -74,11 +74,23 @@ const onTracTracker = (trackingNumber) => {
   })();
 }
 
+amazonTracker = (trackingNumber) => {
+  let url = `https://track.amazon.com/api/tracker/${trackingNumber}`
+  console.debug(`Fetching Amazon status with url: ${url}`);
+  return axios.get(url)
+    .then(res => {
+      // console.debug(`returning Amazon ${res.data}`)
+      return res.data
+    })
+    .catch(err => {return err})
+}
+
 trackers = {
   usps: uspsTracker,
   ups: upsTracker,
   fedex: fedExTracker,
-  ontrac: onTracTracker
+  ontrac: onTracTracker,
+  amazon: amazonTracker
 }
 
 module.exports = trackers;

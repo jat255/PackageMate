@@ -113,11 +113,81 @@ const onTracParser = (response) => {
   return stat;
 }
 
+const amazonParser = (response) => {
+  console.debug("Parsing Amazon response")
+  var tc = require("timezonecomplete");
+  // console.debug("loaded timezonecomplete")
+  // response format:
+
+  // { progressTracker:
+  //   '{"progressMeter":{"milestoneList":[{"position":0,"mileStoneType":"NORMAL","eventSummary":{"statusElement":{"translatorString":{"localisedStringId":"swa_rex_shipping_label_created","fieldValueMap":null},"statusCode":null},"reasonElement":null,"metaDataElement":{"translatorString":{"localisedStringId":null,"fieldValueMap":null}},"timeElement":null},"isActive":true},{"position":1,"mileStoneType":"NORMAL","eventSummary":{"statusElement":{"translatorString":{"localisedStringId":"swa_rex_intransit","fieldValueMap":null},"statusCode":null},"reasonElement":null,"metaDataElement":{"translatorString":{"localisedStringId":null,"fieldValueMap":null}},"timeElement":"2021-06-08T03:00:00.000Z"},"isActive":true},{"position":2,"mileStoneType":"NORMAL","eventSummary":{"statusElement":{"translatorString":{"localisedStringId":"swa_rex_ofd","fieldValueMap":null},"statusCode":null},"reasonElement":null,"metaDataElement":{"translatorString":{"localisedStringId":null,"fieldValueMap":null}},"timeElement":"2021-06-08T21:41:45.000Z"},"isActive":true},{"position":3,"mileStoneType":"NORMAL","eventSummary":{"statusElement":{"translatorString":{"localisedStringId":"swa_rex_delivered","fieldValueMap":null},"statusCode":null},"reasonElement":null,"metaDataElement":{"translatorString":{"localisedStringId":null,"fieldValueMap":null}},"timeElement":"2021-06-08T21:41:45.000Z"},"isActive":true}]},"customerRescheduleRequestInfo":null,"errors":null,"summary":{"status":"Delivered","metadata":{"deliveryAddressId":{"stringValue":"XQI6PNXLLXFBJN4NYWJHYHJWYN4NJBFXLLXNP6IQXMHFRAQPXTQ2EIA4G28ARFHM","type":"STRING"},"promisedDeliveryDate":{"date":"2021-06-10T06:59:59.000Z","type":"DATE"},"expectedDeliveryDate":{"date":"2021-06-09T03:00:00.000Z","type":"DATE"},"trackingStatus":{"stringValue":"DELIVERED","type":null},"creationDate":{"date":"2021-06-07T19:12:05.156Z","type":null},"deliveryDate":{"date":"2021-06-08T21:41:45.000Z","type":"DATE"},"lastLegCarrier":{"stringValue":"Amazon","type":"STRING"}},"proofOfDelivery":null},"expectedDeliveryDate":"2021-06-09T03:00:00.000Z","legType":"FORWARD","hasDeliveryDelayed":false,"trackerSource":"MCF"}',
+  //  eventHistory:
+  //   '{"eventHistory":[{"eventCode":"CreationConfirmed","statusSummary":{"localisedStringId":"swa_rex_detail_creation_confirmed","fieldValueMap":null},"eventTime":"2021-06-07T19:12:20.000Z","location":null,"subReasonCode":null,"eventMetadata":{"eventImage":null}},{"eventCode":"Received","statusSummary":{"localisedStringId":"swa_rex_arrived_at_sort_center","fieldValueMap":null},"eventTime":"2021-06-08T04:11:25.000Z","location":{"addressId":null,"city":"Aurora","stateProvince":"CO","countryCode":"US","postalCode":"80011"},"subReasonCode":null,"eventMetadata":{"eventImage":null}},{"eventCode":"Departed","statusSummary":{"localisedStringId":"swa_rex_detail_departed","fieldValueMap":null},"eventTime":"2021-06-08T06:26:13.000Z","location":{"addressId":null,"city":"Aurora","stateProvince":"CO","countryCode":"US","postalCode":"80011"},"subReasonCode":null,"eventMetadata":{"eventImage":null}},{"eventCode":"Received","statusSummary":{"localisedStringId":"swa_rex_arrived_at_sort_center","fieldValueMap":null},"eventTime":"2021-06-08T09:30:16.000Z","location":{"addressId":null,"city":"THORNTON","stateProvince":"CO","countryCode":"US","postalCode":"80241"},"subReasonCode":null,"eventMetadata":{"eventImage":null}},{"eventCode":"OutForDelivery","statusSummary":{"localisedStringId":"swa_rex_detail_arrived_at_delivery_Center","fieldValueMap":null},"eventTime":"2021-06-08T16:13:52.000Z","location":{"addressId":null,"city":"THORNTON","stateProvince":"CO","countryCode":"US","postalCode":"80241"},"subReasonCode":"NONE","eventMetadata":{"eventImage":null}},{"eventCode":"Delivered","statusSummary":{"localisedStringId":"swa_rex_detail_delivered","fieldValueMap":null},"eventTime":"2021-06-08T21:41:45.000Z","location":{"addressId":"XQI6PNXLLXFBJN4NYWJHYHJWYN4NJBFXLLXNP6IQXMHFRAQPXTQ2EIA4G28ARFHM","city":null,"stateProvince":null,"countryCode":null,"postalCode":null},"subReasonCode":"DELIVERED_TO_HOUSEHOLD_MEMBER","eventMetadata":{"eventImage":null}}],"errors":null,"summary":{"status":null,"metadata":null,"proofOfDelivery":null},"trackerSource":"MCF"}',
+  //  addresses:
+  //   '{"XQI6PNXLLXFBJN4NYWJHYHJWYN4NJBFXLLXNP6IQXMHFRAQPXTQ2EIA4G28ARFHM":{"state":"CO","city":"BOULDER","country":"US","fullAddress":null}}',
+  //  eligibleActions: null,
+  //  proofOfDeliveryImage: null,
+  //  notificationWeblabTreatment: null,
+  //  claimYourPackageWeblabTreatment: null,
+  //  packageMarketplaceDetail: null,
+  //  returnDetails: null,
+  //  shipperBrandingDetails: null,
+  //  geocodeDetails: null }
+
+  // console.debug("parsing progressTracker")
+  // console.debug(response)
+  const res = JSON.parse(response[0]['progressTracker'])
+  // console.debug('got res')
+
+  // console.debug('parsing eventHistory')
+  const hist = JSON.parse(response[0]['eventHistory'])['eventHistory']
+  // console.debug('getting last_event')
+  const last_event = hist[hist.length - 1]
+
+  let eventCode = last_event['eventCode'];
+  if (eventCode == 'OutForDelivery') {
+    eventCode = 'Out for delivery';
+  }
+  let eventTime = last_event['eventTime'];
+  let dateTime;
+  let dateStr = '';
+  if (eventTime) {
+    dateTime = new tc.DateTime(eventTime, tc.utc())
+    dateTime = dateTime.convert(tc.local())
+    dateStr = dateTime.format('yyyy-MM-dd hh:mm a')
+  }
+  let city = last_event['location']['city'];
+  if (city) {
+    city = city.charAt(0).toUpperCase() + city.slice(1).toLowerCase();
+    city = `${city}, `
+  } else {
+    city = ''
+  }
+  let state = last_event['location']['state'];
+  if (!state) {
+    state = ''
+  }
+
+  const summary = res['summary']
+  const edd = res['expectedDeliveryDate']
+  let eddStr = '';
+  if (edd) {
+    edd_dt = new tc.DateTime(edd, tc.utc())
+    edd_dt = edd_dt.convert(tc.local())
+    eddStr = ` - Expected: ${edd_dt.format('yyyy-MM-dd')}`
+  }
+
+  let stat = `${city}${state} (${dateStr}) - ${eventCode}${eddStr}`
+  console.debug(`Status is "${stat}"`)
+  return stat;
+}
+
 parsers = {
   usps: uspsParser,
   ups: upsParser,
   fedex: fedExParser,
-  ontrac: onTracParser
+  ontrac: onTracParser,
+  amazon: amazonParser
 }
 
 module.exports = parsers;

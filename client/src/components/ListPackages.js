@@ -10,6 +10,7 @@ import uspsLogo from '../img/usps.svg'
 import fedexLogo from '../img/fedex.svg'
 import upsLogo from '../img/ups.svg'
 import ontracLogo from '../img/ontrac.svg'
+import amazonLogo from '../img/amazon.svg'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBoxOpen } from '@fortawesome/free-solid-svg-icons'
@@ -23,6 +24,8 @@ const getUrl = (trackingNumber, carrier) => {
     return `https://www.ups.com/track?loc=en_US&tracknum=${trackingNumber}`
   } else if ( carrier === 'FedEx' ) {
     return `https://www.fedex.com/apps/fedextrack/?tracknumbers=${trackingNumber}&locale=en_US`
+  } else if ( carrier === 'Amazon' ) {
+    return `https://track.amazon.com/tracking/${trackingNumber}`
   } else {
     return `https://www.ontrac.com/trackingresults.asp?tracking_number=${trackingNumber}`
   }
@@ -38,6 +41,8 @@ const getLogo = (carrier) => {
     logo = fedexLogo
   } else if ( carrier === 'OnTrac' ) {
     logo = ontracLogo
+  } else if ( carrier === 'Amazon' ) {
+    logo = amazonLogo
   } else {
     logo = null
   }

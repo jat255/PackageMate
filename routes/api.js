@@ -39,6 +39,8 @@ router.get('/packages/update/:id', (req, res, next) => {
         r = trackers.ups(data.trackingNumber);
       } else if ( data.carrier === 'OnTrac' ) {
         r = trackers.ontrac(data.trackingNumber);
+      } else if ( data.carrier === 'Amazon' ) {
+        r = trackers.amazon(data.trackingNumber);
       } else {
         r = Promise.reject(`Did not know how to process carrier: ${data.carrier}`);
       }
@@ -55,6 +57,8 @@ router.get('/packages/update/:id', (req, res, next) => {
           stat = parsers.ups(results);
         } else if ( data.carrier === 'OnTrac' ) {
           stat = parsers.ontrac(results);
+        } else if ( data.carrier === 'Amazon' ) {
+          stat = parsers.amazon(results);
         } else {
           stat = 'Could not parse tracker response'
         }

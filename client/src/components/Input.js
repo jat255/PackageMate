@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUsps } from '@fortawesome/free-brands-svg-icons'
 import { faFedex } from '@fortawesome/free-brands-svg-icons'
 import { faUps } from '@fortawesome/free-brands-svg-icons'
+import { faAmazon } from '@fortawesome/free-brands-svg-icons'
 
 
 // code to wait for an element to be present
@@ -42,6 +43,7 @@ class Input extends Component {
     USPS: <FontAwesomeIcon icon={faUsps} />,
     FedEx: <FontAwesomeIcon icon={faFedex} />,
     UPS: <FontAwesomeIcon icon={faUps} />,
+    Amazon: <FontAwesomeIcon icon={faAmazon} />,
   }
 
   addPackage = () => {
