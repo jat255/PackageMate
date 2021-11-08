@@ -63,6 +63,7 @@ router.get('/packages/update/:id', (req, res, next) => {
           stat = 'Could not parse tracker response'
         }
         data.status = stat
+        console.log(`data.status is: ${data.status}`)
       })
       .then(() => {
         Package.updateOne(

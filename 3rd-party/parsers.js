@@ -67,28 +67,34 @@ const fedExParser = (response) => {
   //    'Expand History'
   //  ]
   // first three values are the latest status
-  // console.log(`response: ${response}`)
+  console.log(`response: ${response}`)
   const res = response[0]
-  const dayAndDate = res[0];
-  // console.log(`dayAndDate: ${dayAndDate}`)
-  const timeAndLocation = res[1];
-  // console.log(`timeAndLocation: ${timeAndLocation}`)
-  const details = res[2];
-  // console.log(`details: ${details}`)
-  let [time, cityState] = timeAndLocation.split('\t')
-  // console.log(`time: ${time}; cityState: ${cityState};`)
+  var arrayLength = res.length;
+  for (var i = 0; i < arrayLength; i++) {
+      console.log(`res[${i}]: ${res[i]}`);
+  }
+  const dayAndDate = res[2].trim();
+  console.log(`dayAndDate: ${dayAndDate}`);
+  const timeAndLocation = res[4];
+  console.log(`timeAndLocation: ${timeAndLocation}`);
+  const details = res[5];
+  console.log(`details: ${details}`);
+  let [time, cityState] = timeAndLocation.split('\t');
+  time = time.trim();
+  console.log(`time: ${time}; cityState: ${cityState};`);
   let [city, state] = cityState.split(', ');
-  // console.log(`city: ${city}; state: ${state}`)
-  city = titleCase(city);
-  // console.log(`city: ${city}`)
+  console.log(`city: ${city}; state: ${state}`);
+  city = titleCase(city).trim();
+  console.log(`city: ${city}`);
+  console.log(`parsing dateTime: ${dayAndDate} - ${time}`);
   let dateTime = new tc.DateTime(
     `${dayAndDate} - ${time}`,
     "EEEE, MMMM d, yyyy - h:mm aa"
-  )
-  // console.log(`dateTime: ${dateTime}`)
+  );
+  console.log(`dateTime: ${dateTime}`)
   let stat = `${city}, ${state} (${dateTime.format("yyyy-MM-dd hh:mm a")}) - ${details}
               Expected: ${res[res.length - 1]}`;
-  // console.log(`stat: ${stat}`)
+  console.log(`stat: ${stat}`)
   return stat;
 }
 

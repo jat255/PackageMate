@@ -7,6 +7,7 @@ const uspsTracker = (trackingNumber) => {
   console.debug(`Using url ${url} with  xml ${xml}`);
   return axios.get(`${url}${xml}`)
     .then(res => {
+      console.log(`USPS tracker res: ${res.data}`);
       return res.data
     })
     .catch(err => {return err})
@@ -21,6 +22,7 @@ const upsTracker = (trackingNumber) => {
     }
   })
     .then(res => {
+      console.log(`UPS tracker res: ${res.data}`);
       return res.data
     })
     .catch(err => {return err})
@@ -49,7 +51,7 @@ const fedExTracker = (trackingNumber) => {
       res.push(text);
     }
 
-    // console.log(res);
+    console.log(`Fedex tracker res: ${res}`);
     await browser.close();
     return res;
   })();
@@ -79,6 +81,12 @@ const onTracTracker = (trackingNumber) => {
     const text = await results2.evaluate(element => element.innerText);
     let res = text.split(/[\n\t]+/)
     res = res.slice(0, res.length - 1)
+
+    // get expected delivery date (if present)
+    const EXP_DELIVERY_SELECTOR = ''
+
+    console.log(`Ontrac tracker res: ${res}`);
+
     return res;
     // Returns array of ["date", "time", "status", "location"]
   })();
