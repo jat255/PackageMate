@@ -76,4 +76,5 @@ a#package-tabs-tab-archived.active {
 .detail-cell {
   line-height: 1rem;
   white-space: pre-wrap;
+  max-width: 16vw;
 }

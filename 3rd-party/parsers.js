@@ -1,3 +1,5 @@
+const util = require('util')
+
 const uspsParser = (response) => {
   const jsdom = require("jsdom");
   const dom = new jsdom.JSDOM(response);
@@ -7,6 +9,9 @@ const uspsParser = (response) => {
 }
 
 const upsParser = (response) => {
+  // console.log(util.inspect(response, depth=null));
+  // console.log(util.inspect(response[0].trackResponse.shipment[0], depth=null))
+  // console.log(util.inspect(response[0].trackResponse.shipment[0].package[0].deliveryDate[0].date, depth=null))
   let lastActivity = response[0].trackResponse.shipment[0].package[0].activity[0];
   // response format:
   //
@@ -27,14 +32,35 @@ const upsParser = (response) => {
   //   date: '20200905',
   //   time: '122200'
   // }
+  let expectedDeliveryDate;
+  expectedDeliveryDate = response[0].trackResponse.shipment[0].package[0].deliveryDate[0].date;
+  if (expectedDeliveryDate === undefined) expectedDeliveryDate = '';
+  console.log(`expectedDeliveryDate: ${expectedDeliveryDate}`)
+  // date is in '20211117' format
   var tc = require("timezonecomplete");
 
   let city = `${lastActivity.location.address.city}`
   city = city.charAt(0).toUpperCase() + city.slice(1).toLowerCase();
+  console.log(`city: ${city}`);
   let state = `${lastActivity.location.address.stateProvince}`
+  console.log(`state: ${state}`);
   let desc = `${lastActivity.status.description}`
+  console.log(`desc: ${desc}`);
   let dateRegex = /(\d{4})(\d{2})(\d{2})/;
   let dateArray = dateRegex.exec(`${lastActivity.date}`); 
+  console.log(`dateArray: ${dateArray}`);
+  let expectedDateArray = dateRegex.exec(expectedDeliveryDate);
+  console.log(`expectedDateArray: ${expectedDateArray}`);
+  let expectedDateStr = 'Unknown';
+  if (expectedDateArray !== null) {
+    let expectedDate = new tc.DateTime(
+      (+expectedDateArray[1]),
+      (+expectedDateArray[2]),
+      (+expectedDateArray[3])
+    );
+    expectedDateStr = expectedDate.format("yyyy-MM-dd"); 
+  }
+  console.log(`expectedDateStr: ${expectedDateStr}`);
   let timeRegex = /(\d{2})(\d{2})(\d{2})/;
   let timeArray = timeRegex.exec(`${lastActivity.time}`); 
 
@@ -48,7 +74,8 @@ const upsParser = (response) => {
     (+timeArray[3]),
   );
 
-  let stat = `${city}, ${state} (${updateDate.format("yyyy-MM-dd hh:mm a")}) – ${desc}`
+  let stat = `${city}, ${state} (${updateDate.format("yyyy-MM-dd hh:mm a")}) – ${desc}
+Expected: ${expectedDateStr}`
   
   return stat
 }
@@ -78,12 +105,19 @@ const fedExParser = (response) => {
   const timeAndLocation = res[4];
   console.log(`timeAndLocation: ${timeAndLocation}`);
   const details = res[5];
+  if (details === undefined) {
+    details = '';
+  }
   console.log(`details: ${details}`);
   let [time, cityState] = timeAndLocation.split('\t');
+  if (cityState === undefined) cityState = '';
   time = time.trim();
   console.log(`time: ${time}; cityState: ${cityState};`);
-  let [city, state] = cityState.split(', ');
-  console.log(`city: ${city}; state: ${state}`);
+  let city = ''; let state = '';
+  [city, state] = cityState.split(', ');
+  if (city === undefined) city = '';
+  if (state === undefined) state = '';
+  console.log(`city: ${city}; state: ${state};`);
   city = titleCase(city).trim();
   console.log(`city: ${city}`);
   console.log(`parsing dateTime: ${dayAndDate} - ${time}`);
@@ -91,9 +125,12 @@ const fedExParser = (response) => {
     `${dayAndDate} - ${time}`,
     "EEEE, MMMM d, yyyy - h:mm aa"
   );
+  let cityAndState = '';
+  if (city == '' && state == '') cityAndState = 'No Location';
+  else cityAndState = `${city}, ${state}`
   console.log(`dateTime: ${dateTime}`)
-  let stat = `${city}, ${state} (${dateTime.format("yyyy-MM-dd hh:mm a")}) - ${details}
-              Expected: ${res[res.length - 1]}`;
+  let stat = `${cityAndState} (${dateTime.format("yyyy-MM-dd hh:mm a")}) - ${details}
+Expected: ${res[res.length - 1]}`;
   console.log(`stat: ${stat}`)
   return stat;
 }
@@ -107,6 +144,7 @@ const onTracParser = (response) => {
   //   05:03PM,                                 # time
   //   Delivered                                # status
   //   BOULDER, CO                              # location
+  //   11/11/21 By End of Day                   # expected
   // ]
   const res = response[0];
   let [city, state] = res[3].split(', ');
@@ -117,6 +155,8 @@ const onTracParser = (response) => {
   )
 
   let stat = `${city}, ${state} (${dateTime.format("yyyy-MM-dd hh:mm a")}) - ${res[2]}`;
+  // let stat = `${city}, ${state} (${dateTime.format("yyyy-MM-dd hh:mm a")}) - ${res[2]}
+  // Expected: ${res[res.length - 1]}`;
   return stat;
 }
 
@@ -190,6 +230,7 @@ const amazonParser = (response) => {
 }
 
 function titleCase(str) {
+  if (str == '') return '';
   return str.toLowerCase().split(' ').map(function(word) {
     return word.replace(word[0], word[0].toUpperCase());
   }).join(' ');

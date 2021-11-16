@@ -1,3 +1,4 @@
+const util = require('util')
 const axios = require('axios');
 const playwright = require('playwright');
 
@@ -22,7 +23,7 @@ const upsTracker = (trackingNumber) => {
     }
   })
     .then(res => {
-      console.log(`UPS tracker res: ${res.data}`);
+      console.log(`UPS tracker res: ${util.inspect(res.data, depth=null)}`);
       return res.data
     })
     .catch(err => {return err})
@@ -83,12 +84,18 @@ const onTracTracker = (trackingNumber) => {
     res = res.slice(0, res.length - 1)
 
     // get expected delivery date (if present)
-    const EXP_DELIVERY_SELECTOR = ''
+    // const EXP_DELIVERY_SELECTOR = '#trackOverview > div > ul > li.trackDestination > ul > li:nth-child(2) > ul > li'
+    // await page.waitForSelector(EXP_DELIVERY_SELECTOR)
+    // results = await page.$(EXP_DELIVERY_SELECTOR);
+    // text = await results.evaluate(element => element.innerText);
+    // if (text) {
+    //   res.push(text);
+    // }
 
     console.log(`Ontrac tracker res: ${res}`);
 
     return res;
-    // Returns array of ["date", "time", "status", "location"]
+    // Returns array of ["date", "time", "status", "location", "expected"]
   })();
 }
 
