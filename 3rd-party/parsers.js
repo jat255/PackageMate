@@ -9,10 +9,21 @@ const uspsParser = (response) => {
 }
 
 const upsParser = (response) => {
-  // console.log(util.inspect(response, depth=null));
-  // console.log(util.inspect(response[0].trackResponse.shipment[0], depth=null))
-  // console.log(util.inspect(response[0].trackResponse.shipment[0].package[0].deliveryDate[0].date, depth=null))
+  // console.debug("response:")
+  // console.debug(util.inspect(response, depth=null));
+  // console.debug("response[0].trackResponse.shipment[0]")
+  // console.debug(util.inspect(response[0].trackResponse.shipment[0], depth=null))
+  console.debug("response[0].trackResponse.shipment[0].package[0].deliveryDate[0].date")
+  try {
+    console.debug(util.inspect(response[0].trackResponse.shipment[0].package[0].deliveryDate[0].date, depth=null))  }
+  catch(err) {
+    console.debug("No delivery date found")
+  }
+  console.debug(" ")
+  console.debug("lastActivity")
   let lastActivity = response[0].trackResponse.shipment[0].package[0].activity[0];
+  console.debug(util.inspect(lastActivity))
+  console.debug(" ")
   // response format:
   //
   // {
@@ -33,24 +44,30 @@ const upsParser = (response) => {
   //   time: '122200'
   // }
   let expectedDeliveryDate;
-  expectedDeliveryDate = response[0].trackResponse.shipment[0].package[0].deliveryDate[0].date;
-  if (expectedDeliveryDate === undefined) expectedDeliveryDate = '';
-  console.log(`expectedDeliveryDate: ${expectedDeliveryDate}`)
+  console.debug("getting expectedDeliveryDate")
+  try {
+    expectedDeliveryDate = response[0].trackResponse.shipment[0].package[0].deliveryDate[0].date;
+  } catch(err) {
+    console.debug('expectedDeliveryDate undefined!');
+    expectedDeliveryDate = '';
+  }
+  console.debug(`expectedDeliveryDate: ${expectedDeliveryDate}`)
+  console.debug(" ")
   // date is in '20211117' format
   var tc = require("timezonecomplete");
 
   let city = `${lastActivity.location.address.city}`
   city = city.charAt(0).toUpperCase() + city.slice(1).toLowerCase();
-  console.log(`city: ${city}`);
+  console.debug(`city: ${city}`);
   let state = `${lastActivity.location.address.stateProvince}`
-  console.log(`state: ${state}`);
+  console.debug(`state: ${state}`);
   let desc = `${lastActivity.status.description}`
-  console.log(`desc: ${desc}`);
+  console.debug(`desc: ${desc}`);
   let dateRegex = /(\d{4})(\d{2})(\d{2})/;
   let dateArray = dateRegex.exec(`${lastActivity.date}`); 
-  console.log(`dateArray: ${dateArray}`);
+  console.debug(`dateArray: ${dateArray}`);
   let expectedDateArray = dateRegex.exec(expectedDeliveryDate);
-  console.log(`expectedDateArray: ${expectedDateArray}`);
+  console.debug(`expectedDateArray: ${expectedDateArray}`);
   let expectedDateStr = 'Unknown';
   if (expectedDateArray !== null) {
     let expectedDate = new tc.DateTime(
@@ -60,7 +77,7 @@ const upsParser = (response) => {
     );
     expectedDateStr = expectedDate.format("yyyy-MM-dd"); 
   }
-  console.log(`expectedDateStr: ${expectedDateStr}`);
+  console.debug(`expectedDateStr: ${expectedDateStr}`);
   let timeRegex = /(\d{2})(\d{2})(\d{2})/;
   let timeArray = timeRegex.exec(`${lastActivity.time}`); 
 
