@@ -11,7 +11,7 @@ const uspsTracker = (trackingNumber) => {
       console.log(`USPS tracker res: ${res.data}`);
       return res.data
     })
-    .catch(err => {return err})
+    .catch(err => { return err })
 }
 
 const upsTracker = (trackingNumber) => {
@@ -23,10 +23,10 @@ const upsTracker = (trackingNumber) => {
     }
   })
     .then(res => {
-      console.log(`UPS tracker res: ${util.inspect(res.data, depth=null)}`);
+      console.log(`UPS tracker res: ${util.inspect(res.data, depth = null)}`);
       return res.data
     })
-    .catch(err => {return err})
+    .catch(err => { return err })
 }
 
 const fedExTracker = (trackingNumber) => {
@@ -49,7 +49,7 @@ const fedExTracker = (trackingNumber) => {
   };
 
   console.debug(`Getting Fedex tracking information for ${trackingNumber}`)
-  
+
   // first get access_token at auth endpoint
   return axios.request(options)
     .then((response) => {
@@ -95,10 +95,10 @@ const onTracTracker = (trackingNumber) => {
   // async function to scrape status from ontrac website (since API is
   // unavailable...)
   return (async () => {
-    const browser = await playwright.chromium.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']});
+    const browser = await playwright.chromium.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] });
     const page = await browser.newPage();
     await page.goto(url);
-    
+
     // Click on "See Details link"
     const DETAILS_SELECTOR = 'div.trackNumber a';
     await page.waitForSelector(DETAILS_SELECTOR)
@@ -137,7 +137,7 @@ amazonTracker = (trackingNumber) => {
       // console.debug(`returning Amazon ${res.data}`)
       return res.data
     })
-    .catch(err => {return err})
+    .catch(err => { return err })
 }
 
 trackers = {

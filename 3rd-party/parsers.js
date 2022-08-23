@@ -3,7 +3,18 @@ const util = require('util')
 const uspsParser = (response) => {
   const jsdom = require("jsdom");
   const dom = new jsdom.JSDOM(response);
-  const stat = dom.window.document.querySelector("TrackSummary").textContent;
+  let stat 
+  try {
+    stat = dom.window.document.querySelector("TrackSummary").textContent;
+  } catch (error) {
+    console.error(error);
+    try {
+      stat = dom.window.document.querySelector("Description").textContent;
+    } catch (error) {
+      console.error(error);
+      stat = "Could not parse USPS response";
+    }
+  }
   
   return stat;
 }
@@ -57,10 +68,23 @@ const upsParser = (response) => {
   var tc = require("timezonecomplete");
 
   let city = `${lastActivity.location.address.city}`
-  city = city.charAt(0).toUpperCase() + city.slice(1).toLowerCase();
+  city = titleCase(city);
   console.debug(`city: ${city}`);
   let state = `${lastActivity.location.address.stateProvince}`
   console.debug(`state: ${state}`);
+
+  let location;
+  if (city == '' && state == '') {
+    location = 'Unknown location';
+  } else if (city == '') {
+    location = state;
+  } else if (state == '') {
+    location = city;
+  } else {
+    location = `${city}, ${state}`;
+  }
+  console.debug(`location: ${location}`);
+
   let desc = `${lastActivity.status.description}`
   console.debug(`desc: ${desc}`);
   let dateRegex = /(\d{4})(\d{2})(\d{2})/;
@@ -91,7 +115,7 @@ const upsParser = (response) => {
     (+timeArray[3]),
   );
 
-  let stat = `${city}, ${state} (${updateDate.format("yyyy-MM-dd hh:mm a")}) – ${desc}
+  let stat = `${location} (${updateDate.format("yyyy-MM-dd hh:mm a")}) – ${desc}
 Expected: ${expectedDateStr}`
   
   return stat
@@ -486,10 +510,14 @@ const amazonParser = (response) => {
   //  shipperBrandingDetails: null,
   //  geocodeDetails: null }
 
-  // console.debug("parsing progressTracker")
-  // console.debug(response)
+  console.debug("parsing progressTracker")
+  console.debug(response[0])
   const res = JSON.parse(response[0]['progressTracker'])
-  // console.debug('got res')
+  console.debug('got res')
+
+  if ('errors' in res) {
+    return `Error from parser: ${titleCase(res.errors[0].errorMessage)}`
+  }
 
   // console.debug('parsing eventHistory')
   const hist = JSON.parse(response[0]['eventHistory'])['eventHistory']
