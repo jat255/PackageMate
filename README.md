@@ -29,10 +29,16 @@ UPS:
    developer kit signup page, but once you sign up, place the UPS "Access key" into `.env`
 
 Fedex: 
- - Becuase of issues with the API (all my attempts resulted in the API returning outdated
-   information), Fedex package status is obtained by scraping the public website
-   (which is a little bit slower), so no API credentials are needed. 
-   [Playwright](https://github.com/microsoft/playwright) is used for the scraping.
+ - https://developer.fedex.com/api/en-us/home.html
+ - Sign up here, create an "organization", then a new project (I named mine "PackageMate"),
+   and then select the "Tracking API" and fill out the information they ask for. You will
+   be given an "API Key", "Secret Key", and "Shipping Account" under the "TestKey" domain,
+   but this Test key won't work for any real data. To access real tracking data, you need
+   to move to "production", which requeires a Fedex Shipping account. Making an account
+   (and the API access) is free, but does require a credit card. Follow the steps to open
+   a "shipping account", and then link that account to your developer account. Once done,
+   you'll get the real "API Key" and "Secret Key" in the production domain.
+ - Put these values into the `.env` file in the proper place to enable the FedEx tracker.
 
 OnTrac: 
  - Becuase of issues getting access to the API, OnTrac package status is obtained by 
@@ -152,3 +158,14 @@ that you would like to support, it should be added to the database
 model in `models/package.js` (the `carrier` enum), the update function
 in `routes/api.js`, and then in `3rd-party/trackers.js` and 
 `3rd-party/parsers.js`.
+
+### Testing trackers and parsers
+
+Separate from the Docker and web application stack, there are some npm scripts
+included to help debug/test the tracker and parser routines. A few examples
+ar provided in the `package.json` such as the scripts `debug-fedex-tracker` and
+`debug-fedex-parser`, which can be run from the command line with 
+`$ npm run debug-fedex-tracker`. This helps accelerate the tracker development
+process, as you don't have to wait for docker application to rebuild in order
+to test the response (change the tracking number provided in the script to something
+that makes sense to get it to work).

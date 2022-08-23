@@ -98,58 +98,346 @@ Expected: ${expectedDateStr}`
 }
 
 const fedExParser = (response) => {
+  // response looks like:
+  // {
+  //   "transactionId": "4686ea11-12da-4f30-a25c-3498bb76fade",
+  //   "output": {
+  //     "completeTrackResults": [
+  //       {
+  //         "trackingNumber": "277053421731",
+  //         "trackResults": [
+  //           {
+  //             "trackingNumberInfo": {
+  //               "trackingNumber": "277053421731",
+  //               "trackingNumberUniqueId": "12024~277053421731~FDEG",
+  //               "carrierCode": "FDXG"
+  //             },
+  //             "additionalTrackingInfo": {
+  //               "nickname": "",
+  //               "hasAssociatedShipments": false
+  //             },
+  //             "shipperInformation": {
+  //               "contact": {},
+  //               "address": {
+  //                 "city": "Memphis",
+  //                 "stateOrProvinceCode": "TN",
+  //                 "countryCode": "US",
+  //                 "residential": false,
+  //                 "countryName": "United States"
+  //               }
+  //             },
+  //             "recipientInformation": {
+  //               "contact": {},
+  //               "address": {
+  //                 "city": "HOLDERNESS",
+  //                 "stateOrProvinceCode": "NH",
+  //                 "countryCode": "US",
+  //                 "residential": false,
+  //                 "countryName": "United States"
+  //               }
+  //             },
+  //             "latestStatusDetail": {
+  //               "code": "DP",
+  //               "derivedCode": "IT",
+  //               "statusByLocale": "In transit",
+  //               "description": "Departed FedEx location",
+  //               "scanLocation": {
+  //                 "city": "MEMPHIS",
+  //                 "stateOrProvinceCode": "TN",
+  //                 "countryCode": "US",
+  //                 "residential": false,
+  //                 "countryName": "United States"
+  //               },
+  //               "delayDetail": {
+  //                 "status": "ON_TIME"
+  //               }
+  //             },
+  //             "dateAndTimes": [
+  //               {
+  //                 "type": "ESTIMATED_DELIVERY",
+  //                 "dateTime": "2022-08-25T00:00:00-06:00"
+  //               },
+  //               {
+  //                 "type": "COMMITMENT",
+  //                 "dateTime": "2022-08-25T00:00:00-06:00"
+  //               },
+  //               {
+  //                 "type": "ACTUAL_PICKUP",
+  //                 "dateTime": "2022-08-22T00:00:00-06:00"
+  //               },
+  //               {
+  //                 "type": "SHIP",
+  //                 "dateTime": "2022-08-22T00:00:00-06:00"
+  //               },
+  //               {
+  //                 "type": "ACTUAL_TENDER",
+  //                 "dateTime": "2022-08-22T00:00:00-06:00"
+  //               },
+  //               {
+  //                 "type": "ANTICIPATED_TENDER",
+  //                 "dateTime": "2022-08-22T00:00:00-06:00"
+  //               }
+  //             ],
+  //             "availableImages": [],
+  //             "packageDetails": {
+  //               "packagingDescription": {
+  //                 "type": "YOUR_PACKAGING",
+  //                 "description": "Package"
+  //               },
+  //               "physicalPackagingType": "PACKAGE",
+  //               "sequenceNumber": "1",
+  //               "count": "1",
+  //               "weightAndDimensions": {
+  //                 "weight": [
+  //                   {
+  //                     "value": "5.3",
+  //                     "unit": "LB"
+  //                   },
+  //                   {
+  //                     "value": "2.4",
+  //                     "unit": "KG"
+  //                   }
+  //                 ]
+  //               },
+  //               "packageContent": []
+  //             },
+  //             "shipmentDetails": {
+  //               "possessionStatus": true
+  //             },
+  //             "scanEvents": [
+  //               {
+  //                 "date": "2022-08-23T09:59:57-05:00",
+  //                 "eventType": "DP",
+  //                 "eventDescription": "Departed FedEx location",
+  //                 "exceptionCode": "",
+  //                 "exceptionDescription": "",
+  //                 "scanLocation": {
+  //                   "streetLines": [
+  //                     ""
+  //                   ],
+  //                   "city": "MEMPHIS",
+  //                   "stateOrProvinceCode": "TN",
+  //                   "postalCode": "38106",
+  //                   "countryCode": "US",
+  //                   "residential": false,
+  //                   "countryName": "United States"
+  //                 },
+  //                 "locationId": "0381",
+  //                 "locationType": "FEDEX_FACILITY",
+  //                 "derivedStatusCode": "IT",
+  //                 "derivedStatus": "In transit"
+  //               },
+  //               {
+  //                 "date": "2022-08-22T17:07:00-05:00",
+  //                 "eventType": "AR",
+  //                 "eventDescription": "Arrived at FedEx location",
+  //                 "exceptionCode": "",
+  //                 "exceptionDescription": "",
+  //                 "scanLocation": {
+  //                   "streetLines": [
+  //                     ""
+  //                   ],
+  //                   "city": "MEMPHIS",
+  //                   "stateOrProvinceCode": "TN",
+  //                   "postalCode": "38106",
+  //                   "countryCode": "US",
+  //                   "residential": false,
+  //                   "countryName": "United States"
+  //                 },
+  //                 "locationId": "0381",
+  //                 "locationType": "FEDEX_FACILITY",
+  //                 "derivedStatusCode": "IT",
+  //                 "derivedStatus": "In transit"
+  //               },
+  //               {
+  //                 "date": "2022-08-22T10:37:00-05:00",
+  //                 "eventType": "OC",
+  //                 "eventDescription": "Shipment information sent to FedEx",
+  //                 "exceptionCode": "",
+  //                 "exceptionDescription": "",
+  //                 "scanLocation": {
+  //                   "streetLines": [
+  //                     ""
+  //                   ],
+  //                   "postalCode": "38118",
+  //                   "countryCode": "US",
+  //                   "residential": false,
+  //                   "countryName": "United States"
+  //                 },
+  //                 "locationType": "CUSTOMER",
+  //                 "derivedStatusCode": "IN",
+  //                 "derivedStatus": "Initiated"
+  //               },
+  //               {
+  //                 "date": "2022-08-22T00:00:00",
+  //                 "eventType": "PU",
+  //                 "eventDescription": "Picked up",
+  //                 "exceptionCode": "",
+  //                 "exceptionDescription": "",
+  //                 "scanLocation": {
+  //                   "streetLines": [
+  //                     ""
+  //                   ],
+  //                   "city": "OLIVE BRANCH",
+  //                   "stateOrProvinceCode": "MS",
+  //                   "postalCode": "38654",
+  //                   "countryCode": "US",
+  //                   "residential": false,
+  //                   "countryName": "United States"
+  //                 },
+  //                 "locationId": "0386",
+  //                 "locationType": "PICKUP_LOCATION",
+  //                 "derivedStatusCode": "PU",
+  //                 "derivedStatus": "Picked up"
+  //               }
+  //             ],
+  //             "availableNotifications": [
+  //               "ON_DELIVERY",
+  //               "ON_EXCEPTION"
+  //             ],
+  //             "deliveryDetails": {
+  //               "deliveryAttempts": "0",
+  //               "deliveryOptionEligibilityDetails": [
+  //                 {
+  //                   "option": "INDIRECT_SIGNATURE_RELEASE",
+  //                   "eligibility": "POSSIBLY_ELIGIBLE"
+  //                 },
+  //                 {
+  //                   "option": "REDIRECT_TO_HOLD_AT_LOCATION",
+  //                   "eligibility": "POSSIBLY_ELIGIBLE"
+  //                 },
+  //                 {
+  //                   "option": "REROUTE",
+  //                   "eligibility": "POSSIBLY_ELIGIBLE"
+  //                 },
+  //                 {
+  //                   "option": "RESCHEDULE",
+  //                   "eligibility": "POSSIBLY_ELIGIBLE"
+  //                 },
+  //                 {
+  //                   "option": "RETURN_TO_SHIPPER",
+  //                   "eligibility": "POSSIBLY_ELIGIBLE"
+  //                 },
+  //                 {
+  //                   "option": "DISPUTE_DELIVERY",
+  //                   "eligibility": "POSSIBLY_ELIGIBLE"
+  //                 },
+  //                 {
+  //                   "option": "SUPPLEMENT_ADDRESS",
+  //                   "eligibility": "INELIGIBLE"
+  //                 }
+  //               ]
+  //             },
+  //             "originLocation": {
+  //               "locationContactAndAddress": {
+  //                 "address": {
+  //                   "city": "OLIVE BRANCH",
+  //                   "stateOrProvinceCode": "MS",
+  //                   "countryCode": "US",
+  //                   "residential": false,
+  //                   "countryName": "United States"
+  //                 }
+  //               }
+  //             },
+  //             "lastUpdatedDestinationAddress": {
+  //               "city": "HOLDERNESS",
+  //               "stateOrProvinceCode": "NH",
+  //               "countryCode": "US",
+  //               "residential": false,
+  //               "countryName": "United States"
+  //             },
+  //             "serviceDetail": {
+  //               "type": "GROUND_HOME_DELIVERY",
+  //               "description": "FedEx Home Delivery",
+  //               "shortDescription": "HD"
+  //             },
+  //             "standardTransitTimeWindow": {
+  //               "window": {
+  //                 "ends": "2022-08-25T00:00:00-06:00"
+  //               }
+  //             },
+  //             "estimatedDeliveryTimeWindow": {
+  //               "window": {}
+  //             },
+  //             "goodsClassificationCode": "",
+  //             "returnDetail": {}
+  //           }
+  //         ]
+  //       }
+  //     ]
+  //   }
+  // }
+  console.debug('Parsing Fedex response[0]');
+  console.debug(JSON.stringify(response[0], undefined, 2));
+  response = response[0];
+
+  if (response && typeof response === 'object' && 'error' in response) {
+    console.debug('Found error, so returning error message')
+    return response.error;
+  }
+
+  console.debug("Loading timezonecomplete")
   var tc = require("timezonecomplete");
 
-  // response format:
-  //  [
-  //    'Thursday, January 21, 2021',
-  //    '9:09 PM\tDENVER, CO\t',
-  //    'In transit',
-  //    'Tuesday, January 19, 2021',
-  //    '12:00 AM\tHAMMOND, IN\t',
-  //    'Picked up',
-  //    'Expand History'
-  //  ]
-  // first three values are the latest status
-  console.log(`response: ${response}`)
-  const res = response[0]
-  var arrayLength = res.length;
-  for (var i = 0; i < arrayLength; i++) {
-      console.log(`res[${i}]: ${res[i]}`);
+  console.debug("Extracting trackResults")
+  let trackResults = response.output.completeTrackResults[0].trackResults[0];
+  console.debug(`trackResults: ${JSON.stringify(trackResults, undefined, 2)}`);
+
+  // catch tracking error early
+  if (trackResults && typeof trackResults === 'object' && 'error' in trackResults) {
+    console.debug('Found error in track results, returning error message:');
+    console.debug(trackResults.error.message)
+    return trackResults.error.message;
   }
-  const dayAndDate = res[2].trim();
-  console.log(`dayAndDate: ${dayAndDate}`);
-  const timeAndLocation = res[4];
-  console.log(`timeAndLocation: ${timeAndLocation}`);
-  const details = res[5];
-  if (details === undefined) {
-    details = '';
+
+  let scanEvents = trackResults.scanEvents;
+  console.debug(`scanEvents: ${JSON.stringify(scanEvents, undefined, 2)}`);
+
+  let latestScan = scanEvents[0];
+  console.debug(`latestScan: ${JSON.stringify(latestScan, undefined, 2)}`);
+  
+  let dateAndTimes = trackResults.dateAndTimes;
+  console.debug(`dateAndTimes: ${JSON.stringify(dateAndTimes, undefined, 2)}`);
+  
+  // get expected delivery date
+  const estimatedDate = dateAndTimes.find(item => item.type === 'ESTIMATED_DELIVERY');
+  console.debug(`estimatedDate: ${JSON.stringify(estimatedDate, undefined, 2)}`);
+
+  let estimatedDateText
+  if (estimatedDate === undefined) {
+    estimatedDateText = 'Expected date unknown'
+  } else {
+    estimatedDateText = `Expected: ${new tc.DateTime(estimatedDate.dateTime).format('YYYY-MM-dd')}`
   }
-  console.log(`details: ${details}`);
-  let [time, cityState] = timeAndLocation.split('\t');
-  if (cityState === undefined) cityState = '';
-  time = time.trim();
-  console.log(`time: ${time}; cityState: ${cityState};`);
-  let city = ''; let state = '';
-  [city, state] = cityState.split(', ');
-  if (city === undefined) city = '';
-  if (state === undefined) state = '';
-  console.log(`city: ${city}; state: ${state};`);
-  city = titleCase(city).trim();
-  console.log(`city: ${city}`);
-  console.log(`parsing dateTime: ${dayAndDate} - ${time}`);
-  let dateTime = new tc.DateTime(
-    `${dayAndDate} - ${time}`,
-    "EEEE, MMMM d, yyyy - h:mm aa"
-  );
-  let cityAndState = '';
-  if (city == '' && state == '') cityAndState = 'No Location';
-  else cityAndState = `${city}, ${state}`
-  console.log(`dateTime: ${dateTime}`)
-  let stat = `${cityAndState} (${dateTime.format("yyyy-MM-dd hh:mm a")}) - ${details}
-Expected: ${res[res.length - 1]}`;
-  console.log(`stat: ${stat}`)
-  return stat;
+  console.debug(`estimatedDateText: ${estimatedDateText}`)
+
+  // get current location and status
+  let locationString;
+  let city = latestScan.scanLocation.city;
+  console.debug(`city: ${city}`)
+  let state = latestScan.scanLocation.stateOrProvinceCode;
+  console.debug(`state: ${state}`)
+  
+  if (city === undefined && state === undefined) {
+    locationString = 'Unknown location'
+  } else {
+    locationString = `${titleCase(city).trim()}, ${state}`
+  }
+  console.debug(`locationString: ${locationString}`)
+
+
+  let desc = latestScan.eventDescription;
+  console.debug(`desc: ${desc}`)
+
+  let scanDate = new tc.DateTime(latestScan.date).format("(yyyy-MM-dd hh:mm a)")
+  console.debug(`scanDate: ${scanDate}`)
+
+  let status = `${locationString} ${scanDate} - ${desc}
+  ${estimatedDateText}`
+  console.debug(`status: ${status}`)
+
+
+  return status
 }
 
 const onTracParser = (response) => {

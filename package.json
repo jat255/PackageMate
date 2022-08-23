@@ -6,7 +6,16 @@
   "scripts": {
     "start": "node index.js",
     "start-watch": "nodemon index.js",
-    "dev": "concurrently \"yarn run start-watch\" \"cd client && yarn start\""
+    "dev": "concurrently \"yarn run start-watch\" \"cd client && yarn start\"",
+    "debug-usps-tracker": "node -e 'require(\"dotenv\").config(); require(\"./3rd-party/trackers\").usps(\"TRACKING NUMBER HERE\").then(res => console.log(res))'",
+    "debug-usps-parser": "node -e 'require(\"dotenv\").config(); require(\"./3rd-party/trackers\").usps(\"TRACKING NUMBER HERE\").then(res => console.log(require(\"./3rd-party/parsers\").usps([res])))'",
+    "debug-fedex-tracker": "node -e 'require(\"dotenv\").config(); require(\"./3rd-party/trackers\").fedex(\"TRACKING NUMBER HERE\").then(res => console.log(res))'",
+    "debug-fedex-parser": "node -e 'require(\"dotenv\").config(); require(\"./3rd-party/trackers\").fedex(\"TRACKING NUMBER HERE\").then(res => console.log(require(\"./3rd-party/parsers\").fedex([res])))'",
+    "debug-amazon-tracker": "node -e 'require(\"dotenv\").config(); require(\"./3rd-party/trackers\").amazon(\"TRACKING NUMBER HERE\").then(res => console.log(res))'",
+    "debug-amazon-parser": "node -e 'require(\"dotenv\").config(); require(\"./3rd-party/trackers\").amazon(\"TRACKING NUMBER HERE\").then(res => console.log(require(\"./3rd-party/parsers\").amazon([res])))'",
+    "debug-ups-tracker": "node -e 'require(\"dotenv\").config(); require(\"./3rd-party/trackers\").ups(\"TRACKING NUMBER HERE\").then(res => console.log(res))'",
+    "debug-ups-parser": "node -e 'require(\"dotenv\").config(); require(\"./3rd-party/trackers\").ups(\"TRACKING NUMBER HERE\").then(res => console.log(require(\"./3rd-party/parsers\").ups([res])))'"
+  
   },
   "author": "Joshua Taillon",
   "license": "MIT",

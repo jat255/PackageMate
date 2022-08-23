@@ -1,0 +1,112 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Fedex Tracker",
+            "request": "launch",
+            "runtimeArgs": [
+                "run-script",
+                "debug-fedex-tracker"
+            ],
+            "runtimeExecutable": "npm",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node"
+        },
+        {
+            "name": "Debug Fedex Parser",
+            "request": "launch",
+            "runtimeArgs": [
+                "run-script",
+                "debug-fedex-parser"
+            ],
+            "runtimeExecutable": "npm",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node"
+        },
+        {
+            "name": "Debug USPS Tracker",
+            "request": "launch",
+            "runtimeArgs": [
+                "run-script",
+                "debug-usps-tracker"
+            ],
+            "runtimeExecutable": "npm",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node"
+        },
+        {
+            "name": "Debug USPS Parser",
+            "request": "launch",
+            "runtimeArgs": [
+                "run-script",
+                "debug-usps-parser"
+            ],
+            "runtimeExecutable": "npm",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node"
+        },
+        {
+            "name": "Debug UPS Tracker",
+            "request": "launch",
+            "runtimeArgs": [
+                "run-script",
+                "debug-ups-tracker"
+            ],
+            "runtimeExecutable": "npm",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node"
+        },
+        {
+            "name": "Debug UPS Parser",
+            "request": "launch",
+            "runtimeArgs": [
+                "run-script",
+                "debug-ups-parser"
+            ],
+            "runtimeExecutable": "npm",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node"
+        },
+        {
+            "name": "Debug Amazon Tracker",
+            "request": "launch",
+            "runtimeArgs": [
+                "run-script",
+                "debug-amazon-tracker"
+            ],
+            "runtimeExecutable": "npm",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node"
+        },
+        {
+            "name": "Debug Amazon Parser",
+            "request": "launch",
+            "runtimeArgs": [
+                "run-script",
+                "debug-amazon-parser"
+            ],
+            "runtimeExecutable": "npm",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node"
+        },
+    ]
+}

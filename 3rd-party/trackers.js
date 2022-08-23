@@ -30,33 +30,63 @@ const upsTracker = (trackingNumber) => {
 }
 
 const fedExTracker = (trackingNumber) => {
-  const url = `https://www.fedex.com/apps/fedextrack/?tracknumbers=${trackingNumber}&locale=en_US`;
-  // async function to scrape status from fedex website (since API is
-  // unreliable...)
-  return (async () => {
-    const browser = await playwright.chromium.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']});
-    const page = await browser.newPage();
-    await page.goto(url);
-    const STATUS_SELECTOR = 'table.travel-history-table';
-    const DELIVERY_DATE_SELECTOR = '[data-test-id=delivery-date-text]';
-    await page.waitForSelector(STATUS_SELECTOR);
-    let results = await page.$(STATUS_SELECTOR);
-    let text = await results.evaluate(element => element.innerText);
-    let res = text.split('\n')
+  // get bearer token
 
-    // get expected delivery date
-    await page.waitForSelector(DELIVERY_DATE_SELECTOR)
-    results = await page.$(DELIVERY_DATE_SELECTOR);
-    text = await results.evaluate(element => element.innerText);
-    if (text) {
-      res.push(text);
-    }
+  let url = `${process.env.FEDEX_API_URL}/oauth/token`
 
-    console.log(`Fedex tracker res: ${res}`);
-    await browser.close();
-    return res;
-  })();
+  let params = new URLSearchParams();
+  params.append('grant_type', 'client_credentials');
+  params.append('client_id', process.env.FEDEX_API_KEY);
+  params.append('client_secret', process.env.FEDEX_SECRET_KEY);
+
+  let options = {
+    method: 'POST',
+    url: url,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    data: params
+  };
+
+  console.debug(`Getting Fedex tracking information for ${trackingNumber}`)
   
+  // first get access_token at auth endpoint
+  return axios.request(options)
+    .then((response) => {
+      // if we succeeded, save access token and use to call Track API
+      console.debug("FedEx: Got API access tokent")
+      let access_token = response.data.access_token;
+      let track_url = `${process.env.FEDEX_API_URL}/track/v1/trackingnumbers`
+      let track_options = {
+        method: 'POST', url: track_url,
+        headers: {
+          'Authorization': `Bearer ${access_token}`,
+          'Content-Type': 'application/json'
+        },
+        data: {
+          trackingInfo: [
+            {
+              'trackingNumberInfo': {
+                'trackingNumber': trackingNumber
+              }
+            }
+          ],
+          'includeDetailedScans': true
+        }
+      };
+      return axios.request(track_options)
+        .then((response) => {
+          console.log(`Fedex tracker res: ${util.inspect(response.data, depth = 4)}`);
+          return response.data;
+        }).catch((error) => {
+          console.error('Fedex tracker error:')
+          console.error(error);
+          return { 'error': `Error getting tracking info: ${error.toJSON().message}` }
+        })
+    }).catch((error) => {
+      console.error(error);
+      return { 'error': `Error authenticating to API: ${error.toJSON().message}` }
+    });
 }
 
 const onTracTracker = (trackingNumber) => {
