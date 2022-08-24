@@ -51,6 +51,10 @@ a#package-tabs-tab-archived.active {
   margin-bottom:1em;
 }
 
+#alert-row {
+  font-size: medium;
+}
+
 @media only screen and (min-width: 300px) {
   .App {
     width: 80%;
@@ -77,4 +81,60 @@ a#package-tabs-tab-archived.active {
   line-height: 1rem;
   white-space: pre-wrap;
   max-width: 16vw;
+}
+
+/* responsive styling for top input area and package list table */
+@media only screen and (max-width: 830px) {
+  .App {
+    width: 80%;
+  }
+
+  /* Carrier button and container */
+  #input-group-div > .input-group-prepend {
+    width: 100%;
+  }
+
+  button#input-group-dropdown-1 {
+    width: 100%;
+    border-radius: unset;
+  }
+
+  /* "Tracking number" input */
+  input#trackingNumberInput {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* "Description" input and container */
+  div#description-input-group-append {
+    width: 100%;
+  }
+
+  input#description-input {
+    text-align: center;
+    width: 100%;
+  }
+
+  /* "Add package" button and container */
+  div#add-package-input-group {
+    width: 100%
+  }
+
+  button#add-package-btn {
+    width: 100%;
+    border-radius: unset;
+  }
+
+  td, tr, th {
+    display: block;
+    width: 100%;
+  }
+
+  .detail-cell {
+    max-width: unset;
+  }
+
+  .update-one-btn, .archive-btn {
+    width: 50%;
+  }
 }

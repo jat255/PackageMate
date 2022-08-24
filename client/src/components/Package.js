@@ -10,6 +10,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
+import Alert from 'react-bootstrap/Alert'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShippingFast } from '@fortawesome/free-solid-svg-icons'
@@ -128,6 +129,17 @@ class Package extends Component {
               >
                 <FontAwesomeIcon icon={faGithub} /> View project on GitHub
             </Button>
+          </Col>
+        </Row>
+        <Row id='alert-row'>
+          <Col>
+            <Alert key='info' variant='info'>
+              The Amazon tracker is not currently working, 
+              so any packages added for Amazon will return 
+              "Invalid Tracking_id". See <a 
+                 href="https://github.com/jat255/PackageMate/issues/11" 
+                 target="_blank">this issue</a> for details/updates.
+            </Alert>
           </Col>
         </Row>
         <Input

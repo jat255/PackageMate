@@ -126,7 +126,9 @@ class Input extends Component {
     return (
       <Row>
         <Col>
-          <InputGroup className="mb-3">
+          <InputGroup 
+            className="mb-3"
+            id="input-group-div">
             <DropdownButton
               as={InputGroup.Prepend}
               key="carrier-dropdown"
@@ -148,6 +150,7 @@ class Input extends Component {
               placeholder="Tracking number"
               aria-label="Tracking number"
               onChange={this.handleTrackingNumberChange}
+              id='trackingNumberInput'
               value={this.state.trackingNumber}
               onKeyPress={event => {
                 if (event.key === "Enter") {
@@ -156,7 +159,8 @@ class Input extends Component {
               }}
             />
 
-            <InputGroup.Append>
+            <InputGroup.Append
+              id='description-input-group-append'>
               <FormControl
                 placeholder="Description (optional)"
                 aria-label="Description (optional)"
@@ -170,8 +174,12 @@ class Input extends Component {
                 }}
               />
             </InputGroup.Append>
-            <InputGroup.Append>
-              <Button variant="outline-success" onClick={this.addPackage}>Add Package</Button>
+            <InputGroup.Append
+             id='add-package-input-group'>
+              <Button 
+                id='add-package-btn' 
+                variant="outline-success" 
+                onClick={this.addPackage}>Add Package</Button>
             </InputGroup.Append>
           </InputGroup>
         </Col>

@@ -23,7 +23,7 @@ class UpdateOneButton extends Component {
         data-style={ZOOM_OUT}
         data-spinner-color="#6c757d"
         data-spinner-lines={12}
-        className="btn btn-outline-secondary"
+        className="btn btn-outline-secondary update-one-btn"
       >
         <FontAwesomeIcon icon={faRedoAlt}/>
       </LaddaButton>

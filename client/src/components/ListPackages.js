@@ -104,7 +104,7 @@ const ListPackages = ({ activePackages, archivedPackages, archivePackage, update
                           <LaddaButton 
                             onClick={() => archivePackage(pkg._id)}
                             data-size={XS}
-                            className='btn btn-outline-danger'>
+                            className='btn btn-outline-danger archive-btn'>
                             <FontAwesomeIcon icon={faBoxOpen}/>
                           </LaddaButton>
                         </td>
@@ -119,7 +119,7 @@ const ListPackages = ({ activePackages, archivedPackages, archivePackage, update
           </Table>
         </Tab>
         <Tab eventKey="archived" title="Archived">
-          <Table striped hover size="sm" style={{fontSize: 12}}>
+          <Table responsive striped hover size="sm" style={{fontSize: 12}}>
             <thead>
                 <tr>
                   <th>Carrier</th>
