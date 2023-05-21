@@ -1,9 +1,9 @@
 import React from 'react';
+import packageJson from '../../package.json';
 
 const Footer = () => (
 <footer className="footer">
-	<p>This is react sticky footer!!</p>
-
+	<p>PackageMate v{packageJson.version}</p>
 </footer>
 );
 
