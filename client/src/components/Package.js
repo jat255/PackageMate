@@ -126,6 +126,7 @@ class Package extends Component {
               href='https://github.com/jat255/PackageMate'
               size='sm'
               target='_blank'
+              rel='noreferrer'
               >
                 <FontAwesomeIcon icon={faGithub} /> View project on GitHub
             </Button>
@@ -138,7 +139,7 @@ class Package extends Component {
               so any packages added for Amazon will return 
               "Invalid Tracking_id". See <a 
                  href="https://github.com/jat255/PackageMate/issues/11" 
-                 target="_blank">this issue</a> for details/updates.
+                 target="_blank" rel="noreferrer">this issue</a> for details/updates.
             </Alert>
           </Col>
         </Row>

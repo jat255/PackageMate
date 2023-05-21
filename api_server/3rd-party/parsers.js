@@ -484,7 +484,9 @@ const onTracParser = (response) => {
     "MM/dd/yy - hh:mm aa"
   )
 
-  let stat = `${city}, ${state} (${dateTime.format("yyyy-MM-dd hh:mm a")}) - ${res.event_summary} <br> ${res.event_detail} <br> Expected: ${res.expected_date}`;
+  let stat = `${city}, ${state} (${dateTime.format("yyyy-MM-dd hh:mm a")}) - ${res.event_summary} 
+  ${res.event_detail} 
+  Expected: ${res.expected_date}`;
   console.debug(`stat: ${stat}`)
   // Expected: ${res[res.length - 1]}`;
   return stat;
