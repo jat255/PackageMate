@@ -68,6 +68,4 @@ networks:
 
 volumes:
   dbdata:
-  node_modules: 
-  client_node_modules:
   
