@@ -1,4 +1,4 @@
-![animated demo of the client application](img/demo.gif)
+![animated demo of the client application](_img/demo.gif)
 <p align="center"><em>PackageMate: Self-hosted package tracking!</em></p>
 
 This is a simple app using MongoDB, Express.js, React, and Node to allow a user
@@ -118,7 +118,7 @@ $ docker volume rm packagemate_dbdata
 When you visit the app for the first time, there will be no packages in the system, so
 the display will be empty:
 
-![](img/new_install.png)
+![](_img/new_install.png)
 
 To add a package to the tracker, select the
 correct carrier from the dropdown, paste the 
@@ -137,7 +137,7 @@ and OnTrac, currently) will be significantly
 slower than the direct API methods, unfortunately.
 Be patient, and they should finish updating.
 
-![app with some packages loaded in](img/active_packages.png)
+![app with some packages loaded in](_img/active_packages.png)
 
 To update all packages at once, click the blue
 button above the table. The button will show

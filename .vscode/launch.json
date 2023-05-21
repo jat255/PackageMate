@@ -4,6 +4,7 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
         {
             "name": "Debug Fedex Tracker",
             "request": "launch",
@@ -101,6 +102,32 @@
             "runtimeArgs": [
                 "run-script",
                 "debug-amazon-parser"
+            ],
+            "runtimeExecutable": "npm",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node"
+        },
+        {
+            "name": "Debug OnTrac Tracker",
+            "request": "launch",
+            "runtimeArgs": [
+                "run-script",
+                "debug-ontrac-tracker"
+            ],
+            "runtimeExecutable": "npm",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node"
+        },
+        {
+            "name": "Debug OnTrac Parser",
+            "request": "launch",
+            "runtimeArgs": [
+                "run-script",
+                "debug-ontrac-parser"
             ],
             "runtimeExecutable": "npm",
             "skipFiles": [

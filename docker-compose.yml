@@ -3,7 +3,7 @@ version: '3'
 services:
   packagemate-server:
     build:
-      context: .
+      context: api_server
       dockerfile: Dockerfile
     image: packagemate-server
     container_name: packagemate-server
@@ -17,10 +17,6 @@ services:
       - MONGO_DB=$MONGO_DB 
       - UPS_ACCESS_KEY=$UPS_ACCESS_KEY
       - USPS_USERNAME=$USPS_USERNAME
-    volumes:
-      - .:/home/node/app
-      - node_modules:/home/node/app/node_modules
-      - client_node_modules:/home/node/app/client/node_modules
     networks:
       - app-network
     # this will work as long as you haven't changed the mongodb port from the default
@@ -49,10 +45,6 @@ services:
       # this is the port of the main app, by default, port 80 is
       # exposed on the host machine (localhost or 127.0.0.1)
       - "80:3000"
-    volumes:
-      - .:/home/node/app
-      - node_modules:/home/node/app/node_modules
-      - client_node_modules:/home/node/app/client/node_modules
     networks:
       - app-network
     command: npm start

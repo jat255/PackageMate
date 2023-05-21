@@ -138,3 +138,19 @@ a#package-tabs-tab-archived.active {
     width: 50%;
   }
 }
+
+.footer {
+  border-top: 1px solid #eee;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  color: #999;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: small;
+}
+.footer > p {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}

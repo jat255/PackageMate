@@ -466,25 +466,28 @@ const fedExParser = (response) => {
 
 const onTracParser = (response) => {
   var tc = require("timezonecomplete");
-  
+  let res = response[0];
   // response format:
-  // [
-  //   09/08/20,                                # date
-  //   05:03PM,                                 # time
-  //   Delivered                                # status
-  //   BOULDER, CO                              # location
-  //   11/11/21 By End of Day                   # expected
-  // ]
-  const res = response[0];
-  let [city, state] = res[3].split(', ');
+  // {
+  //   expected_date: '05/23/23',
+  //   event_summary: 'Package en route.',
+  //   event_detail: 'The package arrived at an originating OnTrac location and is on its way to your local OnTrac facility for final delivery.',
+  //   event_location: 'PHOENIX, AZ',
+  //   event_date: '05/20/23 at 6:55 PM'
+  // }
+  let [city, state] = res.event_location.split(', ');
   city = city.charAt(0).toUpperCase() + city.slice(1).toLowerCase();
+  console.debug(`city, state: ${city}, ${state}`);
+  let [event_date, event_time] = res.event_date.split(' at ');
   let dateTime = new tc.DateTime(
-    `${res[0]} - ${res[1]}`,
-    "MM/dd/yy - hh:mmaa"
+    `${event_date} - ${event_time}`,
+    "MM/dd/yy - hh:mm aa"
   )
 
-  let stat = `${city}, ${state} (${dateTime.format("yyyy-MM-dd hh:mm a")}) - ${res[2]}`;
-  // let stat = `${city}, ${state} (${dateTime.format("yyyy-MM-dd hh:mm a")}) - ${res[2]}
+  let stat = `${city}, ${state} (${dateTime.format("yyyy-MM-dd hh:mm a")}) - ${res.event_summary} 
+  ${res.event_detail} 
+  Expected: ${res.expected_date}`;
+  console.debug(`stat: ${stat}`)
   // Expected: ${res[res.length - 1]}`;
   return stat;
 }
