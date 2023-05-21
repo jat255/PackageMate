@@ -90,7 +90,7 @@ const fedExTracker = (trackingNumber) => {
 }
 
 const onTracTracker = (trackingNumber) => {
-  const url = `https://www.ontrac.com/trackingresults.asp?tracking_number=${trackingNumber}`;
+  const url = `https://www.ontrac.com/tracking/?number=${trackingNumber}`;
 
   // async function to scrape status from ontrac website (since API is
   // unavailable...)
@@ -99,33 +99,46 @@ const onTracTracker = (trackingNumber) => {
     const page = await browser.newPage();
     await page.goto(url);
 
-    // Click on "See Details link"
-    const DETAILS_SELECTOR = 'div.trackNumber a';
-    await page.waitForSelector(DETAILS_SELECTOR)
-    const results = await page.$(DETAILS_SELECTOR);
-    results.click();
+    // Get expected delivery date
+    const EXP_DELIVERY_SELECTOR = 'p[name="ExpectedDeliveryDateFormatted"]';
+    await page.waitForSelector(EXP_DELIVERY_SELECTOR);
+    const exp_delivery_res = await page.$(EXP_DELIVERY_SELECTOR);
+    let exp_delivery_date = await exp_delivery_res.evaluate(element => element.innerText);
 
-    // Get most recent event
-    const EVENT_SELECTOR = '//tbody[@id="OnTracEvents"]/tr'
-    await page.waitForSelector(EVENT_SELECTOR)
-    const results2 = await page.$(EVENT_SELECTOR);
-    const text = await results2.evaluate(element => element.innerText);
-    let res = text.split(/[\n\t]+/)
-    res = res.slice(0, res.length - 1)
+    const LATEST_EVENT_SELECTOR = 'p[name="EventShortDescriptionFormatted"]';
+    await page.waitForSelector(LATEST_EVENT_SELECTOR);
+    const latest_event_res = await page.$(LATEST_EVENT_SELECTOR);
+    let latest_event_text = await latest_event_res.evaluate(el => el.innerText);
 
-    // get expected delivery date (if present)
-    // const EXP_DELIVERY_SELECTOR = '#trackOverview > div > ul > li.trackDestination > ul > li:nth-child(2) > ul > li'
-    // await page.waitForSelector(EXP_DELIVERY_SELECTOR)
-    // results = await page.$(EXP_DELIVERY_SELECTOR);
-    // text = await results.evaluate(element => element.innerText);
-    // if (text) {
-    //   res.push(text);
-    // }
+    const LATEST_EVENT_DETAIL_SELECTOR = 'p[name="EventLongDescriptionFormatted"]';
+    await page.waitForSelector(LATEST_EVENT_DETAIL_SELECTOR);
+    const latest_event_detail_res = await page.$(LATEST_EVENT_DETAIL_SELECTOR);
+    let latest_event_detail_text = await latest_event_detail_res.evaluate(el => el.innerText);
 
-    console.log(`Ontrac tracker res: ${res}`);
+    const LOCATION_SELECTOR = 'p[name="EventCityFormatted"]';
+    await page.waitForSelector(LOCATION_SELECTOR);
+    const location_res = await page.$(LOCATION_SELECTOR);
+    let location_text = await location_res.evaluate(el => el.innerText);
 
+    const EVENT_DATE_SELECTOR = 'p[name="EventLastDateFormatted"]';
+    await page.waitForSelector(EVENT_DATE_SELECTOR);
+    const event_date_res = await page.$(EVENT_DATE_SELECTOR);
+    let event_date_text = await event_date_res.evaluate(el => el.innerText);
+
+    let res = {
+      expected_date: exp_delivery_date,
+      event_summary: latest_event_text,
+      event_detail: latest_event_detail_text,
+      event_location: location_text,
+      event_date: event_date_text
+    }
+
+    // console.log(`Ontrac tracker res: ${res}`);
+    console.debug(`Ontrac tracker res: ${util.inspect(res, depth = null)}`);
+
+    // Returns object with keys of 
+    // ["expected_date", "event_summary", "event_detail", "event_location", "event_date"]
     return res;
-    // Returns array of ["date", "time", "status", "location", "expected"]
   })();
 }
 

@@ -1,7 +1,4 @@
 .gitignore
 .env
 node_modules/**/*
-node_modules/*
 node_modules
-client/**/*
-client
