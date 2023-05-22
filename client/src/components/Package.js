@@ -112,7 +112,7 @@ class Package extends Component {
 
   render() {
     return (
-      <Container fluid className="p-3">
+      <Container fluid className="p-3 main-container">
         <Row>
           <Col>
             <h1 className="header"><FontAwesomeIcon icon={faShippingFast} /> PackageMate <FontAwesomeIcon icon={faShippingFast} /></h1>

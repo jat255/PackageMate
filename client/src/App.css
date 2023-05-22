@@ -6,6 +6,10 @@
   margin-right: auto;
 }
 
+.main-container {
+  margin-bottom: 30px;
+}
+
 div.tab-pane.active {
   border: 1px solid transparent;
   border-bottom-left-radius: .25rem;
@@ -142,6 +146,7 @@ a#package-tabs-tab-archived.active {
 .footer {
   border-top: 1px solid #eee;
   position: fixed;
+  background-color: white;
   width: 100%;
   bottom: 0;
   left: 0;
