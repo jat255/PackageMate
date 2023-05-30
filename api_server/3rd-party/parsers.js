@@ -2,14 +2,18 @@ const util = require('util')
 
 const uspsParser = (response) => {
   const jsdom = require("jsdom");
-  const dom = new jsdom.JSDOM(response);
+  const dom = new jsdom.JSDOM("");
+  const DOMParser = dom.window.DOMParser;
+  const parser = new DOMParser;
+  const document = parser.parseFromString(response[0], "text/xml");
   let stat 
+
   try {
-    stat = dom.window.document.querySelector("TrackSummary").textContent;
+    stat = document.querySelector("TrackSummary").textContent;
   } catch (error) {
     console.error(error);
     try {
-      stat = dom.window.document.querySelector("Description").textContent;
+      stat = document.querySelector("Description").textContent;
     } catch (error) {
       console.error(error);
       stat = "Could not parse USPS response";
