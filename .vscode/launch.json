@@ -4,7 +4,6 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-
         {
             "name": "Debug Fedex Tracker",
             "request": "launch",
@@ -45,6 +44,19 @@
             "type": "node"
         },
         {
+            "name": "Debug USPS Tracker (node)",
+            "request": "launch",
+            "envFile": "${workspaceFolder}/.env",
+            "cwd": "${workspaceFolder}/api_server",
+            "runtimeArgs": [
+                "3rd-party/test/test-usps-tracker.js"
+            ],
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node"
+        },
+        {
             "name": "Debug USPS Parser",
             "request": "launch",
             "runtimeArgs": [
@@ -52,6 +64,19 @@
                 "debug-usps-parser"
             ],
             "runtimeExecutable": "npm",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node"
+        },
+        {
+            "name": "Debug USPS Parser (node)",
+            "request": "launch",
+            "envFile": "${workspaceFolder}/.env",
+            "cwd": "${workspaceFolder}/api_server",
+            "runtimeArgs": [
+                "3rd-party/test/test-usps-parser.js"
+            ],
             "skipFiles": [
                 "<node_internals>/**"
             ],

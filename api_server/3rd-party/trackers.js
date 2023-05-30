@@ -11,7 +11,9 @@ const uspsTracker = (trackingNumber) => {
       console.log(`USPS tracker res: ${res.data}`);
       return res.data
     })
-    .catch(err => { return err })
+    .catch(err => { 
+      return err 
+    })
 }
 
 const upsTracker = (trackingNumber) => {
