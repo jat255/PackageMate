@@ -8,6 +8,9 @@ env:
 name: deploy
 jobs:
   docker:
+    strategy:
+      matrix:
+        image: ["api_server", "client"]
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -20,7 +23,7 @@ jobs:
         id: dockermeta
         uses: docker/metadata-action@v4
         with:
-          images: ghcr.io/${{ github.repository }}
+          images: ghcr.io/${{ github.repository }}/${{ matrix.image }}
           tags: |
             type=sha
             type=raw,value=latest
@@ -41,7 +44,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
-          context: api_server
+          context: ${{ matrix.image }}
           push: true
           tags: ${{ steps.dockermeta.outputs.tags }}
           labels: ${{ steps.dockermeta.outputs.labels }}
