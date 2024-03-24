@@ -1,6 +1,6 @@
 {
   "name": "packagemate-server",
-  "version": "1.2.4",
+  "version": "1.2.5-dev",
   "description": "A self-hosted package tracking app",
   "main": "index.js",
   "scripts": {
